@@ -158,8 +158,6 @@
       "success": "¡Gracias! Tu mensaje está en camino.",
       "required-note": "Este campo es obligatorio.",
       "invalid-email": "Por favor, introduce una dirección de correo válida.",
-      "map-label": "Mapa que muestra la ubicación de nuestra oficina",
-      "map-pin-title": "Lanzadera física oficial de Stardrive",
       "tool-description": "Envía un mensaje a la empresa a través del formulario de contacto.",
       "tool-name-param": "El nombre completo de la persona que envía el mensaje.",
       "tool-email-param": "La dirección de correo electrónico para responder.",

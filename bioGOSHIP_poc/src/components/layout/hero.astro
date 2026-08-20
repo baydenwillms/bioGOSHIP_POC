@@ -1,7 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
 import HeroChip from "@components/promo/hero-chip.astro";
-import References from "@components/layout/references.astro";
 import { themeConfig } from '~/theme.config';
 import { useTranslations, getLocaleUrl } from "@utils/i18n";
 import Logo from "../../icons/bio_GOSHIP_logo_COLOR.svg";
@@ -57,8 +56,6 @@ const t = useTranslations(locale);
     </div>
   </div>
 </div>
-
-<References {locale} />
 
 <style>
   @reference "../../styles/tailwind.config.css";

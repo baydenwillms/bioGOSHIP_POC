@@ -2,7 +2,6 @@
 import Layout from "@layouts/default.astro";
 import Headline from "@components/headline.astro";
 import ContactForm from "@components/contact/contact-form.astro";
-import ContactMap from "@components/contact/contact-map.astro";
 import { Icon } from "astro-icon/components";
 import { useTranslations, getLocaleUrl } from "@utils/i18n";
 import { themeConfig } from '~/theme.config';
@@ -42,7 +41,6 @@ const t = useTranslations(locale);
           85774 Unterf&ouml;hring<br />
           Germany
         </address>
-        <ContactMap {locale} />
       </div>
     </aside>
   </div>

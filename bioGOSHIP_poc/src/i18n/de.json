@@ -158,8 +158,6 @@
       "success": "Danke! Deine Nachricht ist unterwegs.",
       "required-note": "Dieses Feld ist erforderlich.",
       "invalid-email": "Bitte gib eine gültige E-Mail-Adresse ein.",
-      "map-label": "Karte mit unserem Bürostandort",
-      "map-pin-title": "Offizielle physische Stardrive-Startrampe",
       "tool-description": "Sende dem Unternehmen über das Kontaktformular eine Nachricht.",
       "tool-name-param": "Der vollständige Name der Person, die die Nachricht sendet.",
       "tool-email-param": "Die E-Mail-Adresse für die Antwort.",

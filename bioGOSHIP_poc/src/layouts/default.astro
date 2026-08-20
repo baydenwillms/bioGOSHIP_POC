@@ -121,7 +121,7 @@ const showTopBanner = (themeConfig.promotions?.topBanner && header?.showTopBanne
       {themeConfig.promotions?.newsletterSignup === 'bottom' && <NewsletterSignup {locale} />}
       <Footer {locale} {isError} {isHome} />
     </div>
-    <LanguageSelect {noi18n} {collection} {contentId} {locale} />
+    {themeConfig.i18n.locales.length > 1 ? <LanguageSelect {noi18n} {collection} {contentId} {locale} /> : null}
     <WebMCPTools {locale} />
   </body>
 </html>

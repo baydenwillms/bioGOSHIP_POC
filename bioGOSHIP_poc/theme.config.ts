@@ -5,9 +5,6 @@ import { expressiveCodeThemes } from './expressive-code-themes.mjs';
 // The `with { type: 'json' }` import attribute is required so this file can also be
 // imported from a plain ESM context (e.g. `ec.config.mjs`, which Node loads directly).
 import enStrings from './src/i18n/en.json' with { type: 'json' };
-import deStrings from './src/i18n/de.json' with { type: 'json' };
-import frStrings from './src/i18n/fr.json' with { type: 'json' };
-import esStrings from './src/i18n/es.json' with { type: 'json' };
 
 export const themeConfig: ThemeConfig = {
   // `import.meta.env?.` is guarded because this file is also imported from `ec.config.mjs`,
@@ -39,30 +36,12 @@ export const themeConfig: ThemeConfig = {
   // I18n
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'de', 'fr', 'es'],
+    locales: ['en'],
     languages: {
       en: 'English',
-      de: 'Deutsch',
-      fr: 'Français',
-      es: 'Español',
     },
     languageModules: {
       en: enStrings,
-      de: deStrings,
-      fr: frStrings,
-      es: esStrings,
-    },
-    translatedStructuredData: {
-      de: {
-        author: {
-          name: 'Bio-GO-SHIP',
-          url: 'https://biogoship.org',
-        },
-        publisher: {
-          name: 'Bio-GO-SHIP',
-          url: 'https://biogoship.org',
-        },
-      },
     },
   },
 
@@ -114,15 +93,14 @@ export const themeConfig: ThemeConfig = {
 
   // promotion settings
   promotions: {
-    newsletterSignup: 'footer',
-    footerBanner: true,
-    navAd: true,
-    topBanner: true,
-    heroChip: true,
+    newsletterSignup: false,
+    footerBanner: false,
+    navAd: false,
+    topBanner: false,
+    heroChip: false,
   },
 
-  // for the purpose of this demo, we render intergration options on-demand instead of prerendering them.
-  onDemandRenderedCollections: ['integration_options'],
+  onDemandRenderedCollections: [],
 
   // content/events settings
   events: {
