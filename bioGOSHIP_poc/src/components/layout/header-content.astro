@@ -2,9 +2,8 @@
 import { Icon } from "astro-icon/components";
 import { getLocaleUrl } from "@utils/i18n";
 import MainNav from "@components/layout/nav/main-nav.astro";
-import Logo from '@images/logo.svg';
-import LogoWhite from '@images/logo-white.svg';
-import { themeConfig } from '~/theme.config';
+import Logo from '../../icons/bio_GOSHIP_logo_COLOR.svg';
+import LogoMark from '../../icons/bio_GOSHIP_logo_SVG_unofficial.svg';
 
 interface Props {
   locale: string;
@@ -15,7 +14,7 @@ interface Props {
   };
   /** Initial tabIndex for all interactive elements. The scroll header sets -1 and JS updates it. */
   tabIndex?: number;
-  /** Set to false to disable the h-20 → h-16 scroll-shrink behaviour (e.g. fixed banner). */
+  /** Set to false to disable the h-24 → h-20 scroll-shrink behaviour (e.g. fixed banner). */
   shrink?: boolean;
   /** Marks the home page to not link the logo */
   isHome?: boolean;
@@ -30,10 +29,10 @@ interface Props {
   logoTheme?: 'light' | 'dark';
 }
 
-const { locale, button, tabIndex = 0, shrink = true, isHome, ctaButton, github, logoTheme } = Astro.props as Props;
+const { locale, button, tabIndex = 0, shrink = true, isHome, ctaButton, github } = Astro.props as Props;
 ---
 
-<div data-shrink={`${shrink}`} class:list={['mx-6 flex h-20 items-center justify-between gap-10 lg:container lg:mx-auto', shrink && 'header-content-inner transition-[height] duration-300']}>
+<div data-shrink={`${shrink}`} class:list={['mx-6 flex h-24 items-center justify-between gap-10 lg:container lg:mx-auto', shrink && 'header-content-inner transition-[height] duration-300']}>
   {
     button ? (
       <a href={button.href} class="btn-subtle rounded px-3 text-sm" tabindex={tabIndex}>
@@ -41,17 +40,26 @@ const { locale, button, tabIndex = 0, shrink = true, isHome, ctaButton, github, 
         {button.text}
       </a>
     ) : isHome ? (
-      <span aria-hidden="true">
-        <Logo class:list={['header-logo-dark h-10 w-fit touch-none select-none', logoTheme === 'dark' ? 'hidden' : logoTheme === 'light' ? 'block' : 'block dark:hidden']} />
-        <LogoWhite class:list={['touch-none^ header-logo-white h-10 w-fit select-none', logoTheme === 'dark' ? 'hidden' : logoTheme === 'light' ? 'block' : 'hidden dark:block']} />
+      <span class="flex items-center gap-3">
+        <span aria-hidden="true" class="shrink-0">
+          <Logo class="logo-color h-14 w-auto dark:hidden" />
+          <LogoMark class="hidden h-14 w-auto text-white dark:block" />
+        </span>
+        <span class="site-wordmark">
+          <span class="site-wordmark__bio">Bio</span>
+          <span class="site-wordmark__name">GO-SHIP</span>
+        </span>
       </span>
     ) : (
-      <a href={getLocaleUrl('/', locale)} class="block w-fit select-none" tabindex={tabIndex}>
-        <p class="sr-only hidden" id="siteNameLogo">
-          {themeConfig.name}
-        </p>
-        <Logo aria-labelledby="siteNameLogo" class:list={['header-logo-dark h-10 w-fit', logoTheme === 'dark' ? 'hidden' : logoTheme === 'light' ? 'block' : 'block dark:hidden']} />
-        <LogoWhite aria-labelledby="siteNameLogo" class:list={['header-logo-white h-10 w-fit', logoTheme === 'light' ? 'hidden' : logoTheme === 'dark' ? 'block' : 'hidden dark:block']} />
+      <a href={getLocaleUrl('/', locale)} class="flex w-fit items-center gap-3 select-none" tabindex={tabIndex}>
+        <span aria-hidden="true" class="shrink-0">
+          <Logo class="logo-color h-14 w-auto dark:hidden" />
+          <LogoMark class="hidden h-14 w-auto text-white dark:block" />
+        </span>
+        <span class="site-wordmark">
+          <span class="site-wordmark__bio">Bio</span>
+          <span class="site-wordmark__name">GO-SHIP</span>
+        </span>
       </a>
     )
   }
@@ -83,8 +91,8 @@ const { locale, button, tabIndex = 0, shrink = true, isHome, ctaButton, github, 
   function updateHeaderShrink() {
     const scrolled = window.scrollY > 60;
     document.querySelectorAll<HTMLElement>('.header-content-inner').forEach((el) => {
-      el.classList.toggle('h-20', !scrolled);
-      el.classList.toggle('h-16', scrolled);
+      el.classList.toggle('h-24', !scrolled);
+      el.classList.toggle('h-20', scrolled);
     });
   }
 
@@ -100,3 +108,24 @@ const { locale, button, tabIndex = 0, shrink = true, isHome, ctaButton, github, 
     document.addEventListener('astro:page-load', setupHeaderShrink);
   }
 </script>
+
+<style>
+  @reference "../../styles/tailwind.config.css";
+
+  .site-wordmark {
+    @apply text-primary flex items-baseline gap-1.5 whitespace-nowrap;
+  }
+
+  :global(.dark) .site-wordmark {
+    @apply text-white;
+  }
+
+  .site-wordmark__bio {
+    @apply text-lg font-medium tracking-tight sm:text-xl;
+  }
+
+  .site-wordmark__name {
+    @apply text-lg font-semibold tracking-[0.04em] sm:text-xl;
+    box-shadow: inset 0 -2px 0 var(--color-accent);
+  }
+</style>

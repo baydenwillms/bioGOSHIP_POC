@@ -11,8 +11,8 @@
   }
 
   body {
-    /* adjust background to whatever color your footer has at the bottom. The body background is usually only visible there for pages to short for the screen. */
-    @apply bg-secondary-dark m-0 h-full w-full p-0;
+    /* Match the footer so short pages don't flash a different color at the bottom. */
+    @apply bg-primary m-0 h-full w-full p-0;
   }
 
   /*
@@ -44,7 +44,7 @@
   }
 
   a:focus {
-    @apply text-primary no-underline;
+    @apply text-primary no-underline dark:text-primary-light;
   }
 
   a:focus-visible {
@@ -52,7 +52,7 @@
   }
 
   a:hover {
-    @apply text-primary no-underline;
+    @apply text-primary no-underline dark:text-primary-light;
   }
 
   li + li,
@@ -126,8 +126,28 @@
   .card-glow-light {
     box-shadow:
       0 0 0 1px rgba(255, 255, 255, 0.07),
-      0 0 60px rgba(80, 22, 138, 0.18),
-      inset 0 0 40px rgba(80, 22, 138, 0.06);
+      0 0 60px rgba(40, 38, 135, 0.18),
+      inset 0 0 40px rgba(40, 38, 135, 0.06);
+  }
+
+  /* Color mark keeps its own fills. CSS height classes (h-14, h-44) do the sizing. */
+
+  /* PhyloPic silhouettes are black fills. Recolor them through `currentColor`. */
+  .phylo-outline :is(path, g) {
+    fill: currentColor;
+  }
+
+  .phylo-deco {
+    @apply text-primary pointer-events-none absolute opacity-[0.07] dark:text-white dark:opacity-[0.12];
+  }
+
+  .phylo-deco.phylo-deco--on-photo {
+    @apply text-white opacity-[0.2] dark:text-white dark:opacity-[0.24];
+  }
+
+  /* Bathymetry contours are black strokes. Recolor them the same way. */
+  .bathy-outline :is(path) {
+    stroke: currentColor;
   }
 }
 

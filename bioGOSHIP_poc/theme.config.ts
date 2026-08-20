@@ -12,27 +12,27 @@ import esStrings from './src/i18n/es.json' with { type: 'json' };
 export const themeConfig: ThemeConfig = {
   // `import.meta.env?.` is guarded because this file is also imported from `ec.config.mjs`,
   // which Node loads as plain ESM where `import.meta.env` is not defined (only Vite injects it).
-  site: import.meta.env?.SITE_OVERRIDE || 'https://astro-stardrive.com',
-  primaryColor: '#f26430', // mind to also update the Tailwind config if you change this!
-  themeColor: '#50168a',
+  site: import.meta.env?.SITE_OVERRIDE || 'https://biogoship.org',
+  primaryColor: '#282687', // mind to also update the Tailwind config if you change this!
+  themeColor: '#282687',
   generateWebmanifest: true,
-  name: 'Astro Stardrive',
-  shortName: 'Stardrive',
+  name: 'Bio GO-SHIP',
+  shortName: 'Bio GO-SHIP',
   darkMode: true,
   robots: import.meta.env?.ROBOTS || 'index, follow',
-  xHandle: 'example',
+  xHandle: 'UCI_OCEANS',
 
   // Structured data
   author: {
-    type: 'Person',
-    name: 'John Doe',
-    url: 'https://en.wikipedia.org/wiki/John_Doe',
+    type: 'Organization',
+    name: 'Bio-GO-SHIP',
+    url: 'https://biogoship.org',
     image: '',
   },
   publisher: {
     type: 'Organization',
-    name: 'ACME Inc.',
-    url: 'https://en.wikipedia.org/wiki/Acme_Corporation',
+    name: 'Bio-GO-SHIP',
+    url: 'https://biogoship.org',
     image: '',
   },
 
@@ -55,12 +55,12 @@ export const themeConfig: ThemeConfig = {
     translatedStructuredData: {
       de: {
         author: {
-          name: 'Max Mustermann',
-          url: 'https://de.wikipedia.org/wiki/Mustermann#Max_Mustermann',
+          name: 'Bio-GO-SHIP',
+          url: 'https://biogoship.org',
         },
         publisher: {
-          name: 'ACME',
-          url: 'https://de.wikipedia.org/wiki/ACME',
+          name: 'Bio-GO-SHIP',
+          url: 'https://biogoship.org',
         },
       },
     },
@@ -140,7 +140,7 @@ export const themeConfig: ThemeConfig = {
   // LLM and coding assistant settings
   llms: {
     autoGeneration: true,
-    intro: 'Stardrive is a boilerplate and template for Astro.js. It is build to be a alsmost all batteries included starting point for all kinds of content driven websites, like blogs, documentation sites, knowledge bases, or even marketing sites. It is also optimized for being used by and with LLMs and coding assistants to create bullet proofed websites automatically.',
+    intro: 'Bio-GO-SHIP is a community program that quantifies plankton diversity, abundance, and biogeochemical roles across the global ocean, in coordination with GO-SHIP physical and chemical measurements.',
     excludePagesPattern: ['/integration/**'],
     includePages: [],
     addArticles: 'selected',
@@ -148,7 +148,7 @@ export const themeConfig: ThemeConfig = {
     addFAQ: 'all',
   },
 
-  askAiTrigger: 'I am evaluating the Astro Stardrive boilerplate (github.com/peltmonger/stardrive) for my website. Provide a detailed analysis of its features, strengths, and weaknesses. Can you help me using it? How do I get started?',
+  askAiTrigger: 'Explain the Bio-GO-SHIP program: its vision, mission, sampling methods, and how it connects to GO-SHIP. What community benefits does it provide?',
 
   droppedFeatures: ['cloudflare'],
 };

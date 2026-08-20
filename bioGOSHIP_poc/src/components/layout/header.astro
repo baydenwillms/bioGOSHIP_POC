@@ -69,7 +69,7 @@ const isOverlayScroll = !fixed && !!overlay && !isClose;
 {
   isCssFixed && (
     <>
-      <div id="header-placeholder" class="bg-background dark:bg-background-dark h-20" />
+      <div id="header-placeholder" class="bg-background dark:bg-background-dark h-24" />
       <header id="header" role="banner" class:list={['header-base-style fixed left-0 z-50', hasTopBanner ? 'top-0 sm:top-9' : 'top-0']} data-top-banner-offset={hasTopBanner ? 36 : undefined}>
         <HeaderContent {locale} {button} {isHome} {ctaButton} {github} />
       </header>
