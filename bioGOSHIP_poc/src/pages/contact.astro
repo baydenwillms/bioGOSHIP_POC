@@ -1,13 +1,19 @@
 ---
 import Layout from "@layouts/default.astro";
 import Headline from "@components/headline.astro";
-import ContactForm from "@components/contact/contact-form.astro";
 import { Icon } from "astro-icon/components";
 import { useTranslations, getLocaleUrl } from "@utils/i18n";
 import { themeConfig } from '~/theme.config';
 
 const locale = themeConfig.i18n.defaultLocale;
 const t = useTranslations(locale);
+
+const githubIssuesUrl = "https://github.com/biogoship/bioGOSHIP_POC/issues";
+const emails = [
+  { name: "US team (sample)", address: "us-team@biogoship.org" },
+  { name: "International team (sample)", address: "international@biogoship.org" },
+  { name: "Program inbox (sample)", address: "info@biogoship.org" },
+];
 ---
 
 <Layout title={t('pages.contact.title')} description={t('pages.contact.description')}>
@@ -16,14 +22,37 @@ const t = useTranslations(locale);
   <p class="mb-10 max-w-2xl text-lg text-stone-600 dark:text-stone-300">{t('pages.contact.intro-text')}</p>
 
   <div class="flex flex-col justify-between gap-12 lg:flex-row lg:gap-16">
-    <!-- Contact form / Docs -->
-    <div class="flex max-w-xl flex-col gap-12 lg:flex-1">
-      <ContactForm {locale} />
+    <div class="flex max-w-xl flex-col gap-10 lg:flex-1">
+      <div class="flex flex-col gap-4 rounded-lg border border-stone-300 bg-stone-100 p-5 sm:p-6 dark:border-stone-700 dark:bg-stone-800">
+        <h3 class="flex items-center gap-2 text-lg font-semibold">
+          <Icon name="fa7-brands:github" class="h-6 w-6" aria-hidden="true" />
+          {t('pages.contact.issues-heading')}
+        </h3>
+        <p class="text-stone-600 dark:text-stone-300">{t('pages.contact.issues-text')}</p>
+        <a href={githubIssuesUrl} target="_blank" rel="noopener" class="btn-primary self-start">
+          <Icon name="fa7-brands:github" class="h-5 w-5" aria-hidden="true" />
+          <span>{t('pages.contact.issues-cta')}</span>
+        </a>
+      </div>
+
+      <div class="flex flex-col gap-3">
+        <h3 class="text-lg font-semibold">{t('pages.contact.email-heading')}</h3>
+        <p class="text-stone-600 dark:text-stone-300">{t('pages.contact.email-text')}</p>
+        <ul class="m-0 flex list-none flex-col gap-3 p-0">
+          {emails.map((person) => (
+            <li class="m-0">
+              <span class="block text-sm font-semibold">{person.name}</span>
+              <a href={`mailto:${person.address}`} class="text-primary dark:text-primary-light">{person.address}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       <div class="flex flex-col gap-3">
         <h3 class="text-lg font-semibold">{t('pages.contact.docs-heading')}</h3>
         <p>
           {t('pages.contact.docs-text')}<br />
-          <a href={getLocaleUrl('docs', locale)} class="flex items-center gap-1 self-start hover:gap-2">
+          <a href={getLocaleUrl('faq', locale)} class="flex items-center gap-1 self-start hover:gap-2">
             <span>{t('pages.contact.docs-cta')}</span>
             <Icon name="heroicons:arrow-right" class="h-4 w-4" aria-hidden="true" />
           </a>
@@ -31,15 +60,14 @@ const t = useTranslations(locale);
       </div>
     </div>
 
-    <!-- Address -->
     <aside class="flex flex-col gap-8 border-t border-stone-300 pt-12 lg:w-80 lg:shrink-0 lg:border-t-0 lg:pt-0 dark:border-stone-700">
       <div class="flex flex-col gap-1 text-stone-600 dark:text-stone-300">
         <h3 class="text-lg font-semibold">{t('pages.contact.address-heading')}</h3>
         <address class="pt-1 text-sm not-italic">
-          <strong>ACME Inc.</strong><br />
-          Beta-Str. 10a<br />
-          85774 Unterf&ouml;hring<br />
-          Germany
+          <strong>Bio-GO-SHIP</strong><br />
+          University of California, Irvine<br />
+          Department of Earth System Science<br />
+          Irvine, CA, USA
         </address>
       </div>
     </aside>

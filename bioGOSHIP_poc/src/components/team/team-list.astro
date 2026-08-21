@@ -1,0 +1,53 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import { render } from "astro:content";
+import "@styles/markdown.css";
+
+interface Props {
+  entries: CollectionEntry<"team">[];
+  locale: string;
+  empty: string;
+}
+
+const { entries, empty } = Astro.props;
+
+const items = await Promise.all(
+  entries.map(async (entry) => {
+    const { Content } = await render(entry);
+    return { entry, Content };
+  }),
+);
+---
+
+{
+  items.length === 0 ? (
+    <p class="text-stone-600 dark:text-stone-300">{empty}</p>
+  ) : (
+    <ul class="m-0 grid list-none grid-cols-1 gap-5 p-0 sm:grid-cols-2">
+      {items.map(({ entry, Content }) => (
+        <li class="m-0 flex gap-5 rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-700 dark:bg-stone-900">
+          {entry.data.photo?.file ? (
+            <Image src={entry.data.photo.file} alt={entry.data.photo.alt ?? entry.data.name} class="h-20 w-20 shrink-0 rounded-lg object-cover" widths={[80, 160]} sizes="80px" />
+          ) : (
+            <span class="bg-primary/10 text-primary dark:bg-primary-darker dark:text-primary-light flex h-20 w-20 shrink-0 items-center justify-center rounded-lg text-xl font-bold" aria-hidden="true">
+              {entry.data.name
+                .split(" ")
+                .slice(0, 2)
+                .map((part) => part[0])
+                .join("")}
+            </span>
+          )}
+          <div class="flex min-w-0 flex-col gap-1">
+            <h2 class="text-lg font-bold">{entry.data.name}</h2>
+            {entry.data.role && <p class="text-primary dark:text-primary-light m-0 text-sm font-semibold">{entry.data.role}</p>}
+            {entry.data.affiliation && <p class="m-0 text-sm text-stone-500">{entry.data.affiliation}</p>}
+            <div class="markdown-content mt-2 text-sm text-stone-600 dark:text-stone-300">
+              <Content />
+            </div>
+          </div>
+        </li>
+      ))}
+    </ul>
+  )
+}

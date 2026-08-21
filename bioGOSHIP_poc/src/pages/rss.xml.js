@@ -21,7 +21,7 @@ export async function GET(context) {
       pubDate: article.data.publishDate,
       description: article.data.excerpt,
       customData: `<language>${article.id.split('/')[0]}</language>`,
-      link: (article.id.split('/')[0] === defaultLocale ? '' : '/' + article.id.split('/')[0]) + `/blog/${article.id.split('/')[1]}/`,
+      link: (article.id.split('/')[0] === defaultLocale ? '' : '/' + article.id.split('/')[0]) + `/posts/${article.id.split('/')[1]}/`,
     })),
   });
 }

@@ -1,0 +1,46 @@
+---
+import Layout from "@layouts/default.astro";
+import Headline from "@components/headline.astro";
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { useTranslations, getLocaleUrl } from "@utils/i18n";
+import { themeConfig } from "~/theme.config";
+
+const locale = themeConfig.i18n.defaultLocale;
+const t = useTranslations(locale);
+
+const entries = ((await getCollection("cruises", ({ data }) => !data.draft)) as CollectionEntry<"cruises">[]).sort((a, b) => {
+  const ad = a.data.date?.getTime() ?? 0;
+  const bd = b.data.date?.getTime() ?? 0;
+  return bd - ad;
+});
+---
+
+<Layout title={t("pages.cruises.title")} description={t("pages.cruises.description")} {locale}>
+  <Headline text={t("pages.cruises.title")} class="pb-10" />
+  {
+    entries.length === 0 ? (
+      <p class="text-stone-600 dark:text-stone-300">{t("pages.cruises.empty")}</p>
+    ) : (
+      <ul class="m-0 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2">
+        {entries.map((entry) => (
+          <li class="m-0">
+            <a href={getLocaleUrl(`cruises/${entry.id}`, locale)} class="flex h-full flex-col overflow-hidden rounded-xl border border-stone-200 bg-white no-underline dark:border-stone-700 dark:bg-stone-900">
+              <div class="bg-primary/6 aspect-16/10 overflow-hidden dark:bg-white/5">
+                {entry.data.image?.file ? (
+                  <Image src={entry.data.image.file} alt={entry.data.image.alt ?? ""} class="h-full w-full object-cover" widths={[400, 720]} sizes="(min-width: 640px) 50vw, 100vw" />
+                ) : null}
+              </div>
+              <div class="flex flex-1 flex-col gap-2 p-6">
+                {entry.data.date && <span class="text-secondary-dark dark:text-secondary-light text-xs font-semibold tracking-[0.16em] uppercase">{entry.data.date.toLocaleDateString(locale, { dateStyle: "medium" })}</span>}
+                <h2 class="text-lg font-bold text-stone-900 dark:text-white">{entry.data.title}</h2>
+                {entry.data.caption && <p class="text-sm leading-relaxed text-stone-600 dark:text-stone-300">{entry.data.caption}</p>}
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</Layout>

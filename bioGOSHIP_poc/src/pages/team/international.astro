@@ -1,0 +1,19 @@
+---
+import Layout from "@layouts/default.astro";
+import Headline from "@components/headline.astro";
+import TeamList from "@components/team/team-list.astro";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { useTranslations } from "@utils/i18n";
+import { themeConfig } from "~/theme.config";
+
+const locale = themeConfig.i18n.defaultLocale;
+const t = useTranslations(locale);
+
+const entries = ((await getCollection("team", ({ data }) => !data.draft && data.group === "international")) as CollectionEntry<"team">[]).sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99) || a.data.name.localeCompare(b.data.name));
+---
+
+<Layout title={t("pages.team.title-international")} description={t("pages.team.description-international")} {locale}>
+  <Headline text={t("pages.team.title-international")} class="pb-10" />
+  <TeamList {entries} {locale} empty={t("pages.team.empty")} />
+</Layout>

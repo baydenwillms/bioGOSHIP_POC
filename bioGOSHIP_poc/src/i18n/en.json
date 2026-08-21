@@ -12,6 +12,13 @@
     "faq": "FAQ",
     "events": "Events",
     "about": "About",
+    "team": "Team",
+    "team-international": "International team",
+    "team-international-explainer": "Investigators and partners worldwide",
+    "team-usa": "US team",
+    "team-usa-explainer": "US investigators and partners",
+    "publications": "Publications",
+    "cruises": "Cruises",
     "contact": "Contact",
     "pricing": "Pricing",
     "integration": "Integration",
@@ -49,7 +56,9 @@
     "to-start": "To the Beginning",
     "back": "Back",
     "back-overview": "Overview",
-    "back-all-articles": "All Articles",
+    "back-all-articles": "All Posts",
+    "back-all-cruises": "All Cruises",
+    "back-all-publications": "All Publications",
     "back-all-events": "All Events",
     "pagination": "Pagination",
     "page": "Page",
@@ -132,23 +141,45 @@
     },
     "faq": {
       "title": "FAQ",
-      "description": "Find answers to the most common questions about Astro Stardrive. Yes, it is free and open source.",
+      "description": "Common questions about the Bio-GO-SHIP program, sampling, and how to get involved.",
       "search-placeholder": "Search questions...",
       "filter-all-categories": "All categories",
       "no-results": "No questions match your search."
     },
     "about": {
       "title": "About",
-      "description": "The story behind Astro Stardrive - built by Jens, who has been crafting websites since the year 2000."
+      "description": "Bio-GO-SHIP is a community program that quantifies plankton diversity, abundance, and biogeochemical roles across the global ocean."
+    },
+    "team": {
+      "title-international": "International team",
+      "description-international": "Investigators and partners contributing to Bio-GO-SHIP worldwide.",
+      "title-usa": "US team",
+      "description-usa": "US investigators and partners in the Bio-GO-SHIP program.",
+      "empty": "Team members will appear here."
+    },
+    "publications": {
+      "title": "Publications",
+      "description": "Papers, reports, and other publications from the Bio-GO-SHIP community.",
+      "empty": "No publications listed yet."
+    },
+    "cruises": {
+      "title": "Cruise plans",
+      "description": "Upcoming and recent Bio-GO-SHIP cruise plans.",
+      "empty": "No cruise plans posted yet."
     },
     "contact": {
       "title": "Contact us",
-      "description": "Get in touch with nobody - this is for demo purposes only - use GitHub for inquiries.",
-      "intro-text": "Have a question, an idea or just want to say hi? Drop us a line and we'll get back to you as soon as we can.",
-      "docs-heading": "Don't want to wait?",
-      "docs-text": "Most answers are already in our documentation.",
-      "docs-cta": "Browse the docs",
-      "address-heading": "Our office",
+      "description": "Get in touch with the Bio-GO-SHIP community.",
+      "intro-text": "Feel free to reach out to the team. Open a GitHub issue for site or data questions, or email someone directly.",
+      "docs-heading": "Looking for quick answers?",
+      "docs-text": "The FAQ covers how Bio-GO-SHIP works and how to get involved.",
+      "docs-cta": "Read the FAQ",
+      "address-heading": "Program home",
+      "issues-heading": "GitHub Issues",
+      "issues-text": "Report a problem, ask a question, or request a change on our GitHub Issues page.",
+      "issues-cta": "Open an issue",
+      "email-heading": "Email the team",
+      "email-text": "Or write someone directly. These are sample addresses until the real list is in.",
       "name": "Name",
       "name-placeholder": "Your name",
       "email-placeholder": "you@example.com",
@@ -217,8 +248,8 @@
       "title": "Privacy Policy"
     },
     "blog": {
-      "title": "Blog",
-      "description": "Read our latest articles about Astro, web development and more."
+      "title": "Posts",
+      "description": "News and updates from the Bio-GO-SHIP community."
     },
     "events": {
       "title": "Events",
@@ -337,7 +368,7 @@
     "parallax-heading": "How plankton communities respond - and feed back on carbon, oxygen, and nutrients",
     "cta-heading": "Want to learn more?",
     "cta-sub": "Explore the vision, mission, and community behind Bio-GO-SHIP.",
-    "cta-primary": "About the program",
+    "cta-primary": "Read the FAQ",
     "cta-secondary": "Contact the team"
   },
   "features-content": {

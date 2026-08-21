@@ -14,9 +14,18 @@ const { locale, tabIndex = 0 } = Astro.props as Props;
 const t = useTranslations(locale);
 
 const navLinks: NavItem[] = [
-  { href: getLocaleUrl('about', locale), label: t('nav.about') },
-  { href: getLocaleUrl('blog', locale), label: t('nav.blog') },
-  { href: getLocaleUrl('contact', locale), label: t('nav.contact') },
+  {
+    isParent: true,
+    label: t('nav.team'),
+    children: [
+      { href: getLocaleUrl('team/international', locale), label: t('nav.team-international'), subline: t('nav.team-international-explainer'), icon: 'heroicons:globe-alt' },
+      { href: getLocaleUrl('team/usa', locale), label: t('nav.team-usa'), subline: t('nav.team-usa-explainer'), icon: 'heroicons:building-office-2' },
+    ],
+  },
+  { href: getLocaleUrl('posts', locale), label: t('nav.blog') },
+  { href: getLocaleUrl('publications', locale), label: t('nav.publications') },
+  { href: getLocaleUrl('cruises', locale), label: t('nav.cruises') },
+  { href: getLocaleUrl('faq', locale), label: t('nav.faq') },
 ];
 ---
 

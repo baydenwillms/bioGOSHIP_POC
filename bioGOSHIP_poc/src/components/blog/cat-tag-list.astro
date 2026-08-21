@@ -19,7 +19,7 @@ const t = useTranslations(locale);
     entries && entries.length > 0 ? (
       entries.map(async (entry) => (
         <div>
-          <a href={getLocaleUrl(`blog/${type}/${entry?.toLowerCase().replace(/\s/g, '-')}`, locale)} class="group block no-underline hover:drop-shadow-lg">
+          <a href={getLocaleUrl(`posts/${type}/${entry?.toLowerCase().replace(/\s/g, '-')}`, locale)} class="group block no-underline hover:drop-shadow-lg">
             <span
               class:list={[
                 type === 'tags' ? 'rounded-full' : 'rounded-lg',

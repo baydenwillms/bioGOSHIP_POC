@@ -1,0 +1,130 @@
+media: src/images/content
+content:
+  - name: posts
+    label: Posts
+    type: collection
+    path: src/content/articles/en
+    format: yaml-frontmatter
+    filename: "{year}-{month}-{day}-{primary}.md"
+    view:
+      primary: title
+      sort: publishDate
+      order: desc
+    fields:
+      - name: title
+        type: string
+        required: true
+      - name: publishDate
+        type: date
+        required: true
+      - name: excerpt
+        type: text
+      - name: draft
+        type: boolean
+      - name: featured
+        type: boolean
+      - name: body
+        type: rich-text
+
+  - name: publications
+    label: Publications
+    type: collection
+    path: src/content/publications
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      primary: title
+      sort: year
+      order: desc
+    fields:
+      - name: title
+        type: string
+        required: true
+      - name: authors
+        type: string
+        required: true
+      - name: year
+        type: number
+      - name: source
+        type: string
+      - name: doi
+        type: string
+      - name: url
+        type: string
+      - name: draft
+        type: boolean
+      - name: body
+        type: rich-text
+
+  - name: cruises
+    label: Cruise plans
+    type: collection
+    path: src/content/cruises
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      primary: title
+      sort: date
+      order: desc
+    fields:
+      - name: title
+        type: string
+        required: true
+      - name: date
+        type: date
+      - name: caption
+        type: text
+      - name: draft
+        type: boolean
+      - name: body
+        type: rich-text
+
+  - name: team
+    label: Team
+    type: collection
+    path: src/content/team
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      primary: name
+    fields:
+      - name: name
+        type: string
+        required: true
+      - name: role
+        type: string
+      - name: affiliation
+        type: string
+      - name: group
+        type: select
+        required: true
+        options:
+          - value: international
+            label: International
+          - value: usa
+            label: US
+      - name: order
+        type: number
+      - name: draft
+        type: boolean
+      - name: body
+        type: rich-text
+
+  - name: faq
+    label: FAQ
+    type: collection
+    path: src/content/faq-answers/en
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      primary: question
+    fields:
+      - name: question
+        type: string
+        required: true
+      - name: category
+        type: string
+      - name: draft
+        type: boolean
+      - name: body
+        type: rich-text

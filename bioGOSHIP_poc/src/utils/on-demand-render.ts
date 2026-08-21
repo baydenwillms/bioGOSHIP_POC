@@ -11,7 +11,7 @@ import { themeConfig } from '../../theme.config';
 // listed in `themeConfig.onDemandRenderedCollections`.
 // See https://docs.astro.build/en/guides/upgrade-to/v5/#removed-support-for-dynamic-prerender-values-in-routes
 const onDemandRoutes: Record<string, string> = {
-  'blog/[...article].astro': 'articles',
+  'posts/[...article].astro': 'articles',
   'events/detail/[...event].astro': 'events',
   // the events overview/list route is only forced to SSR when events are pulled
   // from the Add to Calendar PRO API (it stays prerendered for markdown events).
@@ -31,8 +31,8 @@ export const setOnDemandPrerender: AstroIntegration = {
   name: 'stardrive:on-demand-collections',
   hooks: {
     'astro:route:setup': ({ route }) => {
-      // Match both the default-locale (`src/pages/blog/...`) and the localized
-      // (`src/pages/[lang]/blog/...`) variants of each collection route.
+      // Match both the default-locale (`src/pages/posts/...`) and the localized
+      // (`src/pages/[lang]/posts/...`) variants of each collection route.
       const collection = Object.entries(onDemandRoutes).find(([suffix]) => route.component.endsWith(suffix))?.[1];
       const dynamicEvents = Boolean(themeConfig.events?.dynamicEvents?.pullFromAddToCalendarPro);
       // The events overview list is prerendered for markdown events but must be SSR when events come from the API so new entries appear without a rebuild.
@@ -75,7 +75,7 @@ interface OnDemandCollectionDescriptor {
 }
 
 const collectionDescriptors = new Map<string, OnDemandCollectionDescriptor>([
-  ['articles', { dir: 'articles', segment: 'blog', withType: false }],
+  ['articles', { dir: 'articles', segment: 'posts', withType: false }],
   ['events', { dir: 'events', segment: 'events/detail', withType: false }],
   ['integration_options', { dir: 'integration-options', segment: 'integration', withType: true }],
 ]);

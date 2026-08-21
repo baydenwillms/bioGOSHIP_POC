@@ -19,7 +19,7 @@ const t = useTranslations(locale);
     <div class="flex flex-col items-center justify-center gap-4 px-5 py-8 xs:px-10 lg:px-16 lg:py-14">
       <h2 class="text-4xl font-bold text-white">{t('global-promo.footer-heading')}</h2>
       <p class="max-w-xl text-lg text-white/80">{t('global-promo.footer-text')}</p>
-      <a href={getLocaleUrl('about', locale)} role="button" class="btn-primary group mt-6 bg-white text-primary hover:bg-secondary hover:text-white">
+      <a href={`${getLocaleUrl('/', locale)}#home-features-heading`} role="button" class="btn-primary group mt-6 bg-white text-primary hover:bg-secondary hover:text-white">
         {t('global-promo.footer-cta')}
         <Icon name="heroicons:arrow-right" class="mr-1 ml-0 h-4 w-4 transition-all duration-200 group-hover:mr-0 group-hover:ml-1" aria-hidden="true" />
       </a>

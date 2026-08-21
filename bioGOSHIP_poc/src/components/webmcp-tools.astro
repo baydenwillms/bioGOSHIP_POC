@@ -76,7 +76,7 @@ if (hasArticles) {
     categories: categoryIds.map((id) => ({ id, label: t(`categories-t.${id}`) })),
     posts: articles.map((a) => ({
       title: a.data.title,
-      url: getLocaleUrl("blog/" + a.id.split("/").slice(-1)[0], locale),
+      url: getLocaleUrl("posts/" + a.id.split("/").slice(-1)[0], locale),
       date: a.data.publishDate.toISOString().slice(0, 10),
       tags: a.data.tags ?? [],
       categories: a.data.categories ?? [],

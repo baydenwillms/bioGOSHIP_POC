@@ -1,0 +1,38 @@
+---
+import Layout from "@layouts/default.astro";
+import Headline from "@components/headline.astro";
+import { Image } from "astro:assets";
+import { getCollection, getEntry, render } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { useTranslations, getLocaleUrl } from "@utils/i18n";
+import { themeConfig } from "~/theme.config";
+import "@styles/markdown.css";
+
+export async function getStaticPaths() {
+  const entries = (await getCollection("cruises", ({ data }) => !data.draft)) as CollectionEntry<"cruises">[];
+  return entries.map((entry) => ({ params: { slug: entry.id } }));
+}
+
+const locale = themeConfig.i18n.defaultLocale;
+const t = useTranslations(locale);
+const entry = (await getEntry("cruises", Astro.params.slug as string)) as CollectionEntry<"cruises"> | undefined;
+if (!entry) return Astro.rewrite("/404_dynamic");
+
+const { Content } = await render(entry);
+---
+
+<Layout title={entry.data.title} description={entry.data.caption} header={{ button: { text: t("labels.back-all-cruises"), href: getLocaleUrl("cruises", locale) } }} {locale}>
+  <Headline text={entry.data.title} class="pb-4" />
+  {entry.data.date && <p class="mb-6 text-sm text-stone-500">{entry.data.date.toLocaleDateString(locale, { dateStyle: "long" })}</p>}
+  {
+    entry.data.image?.file && (
+      <figure class="mb-8 overflow-hidden rounded-xl">
+        <Image src={entry.data.image.file} alt={entry.data.image.alt ?? ""} class="w-full" widths={[800, 1280]} sizes="100vw" />
+        {entry.data.caption && <figcaption class="mt-3 text-sm text-stone-600 dark:text-stone-300">{entry.data.caption}</figcaption>}
+      </figure>
+    )
+  }
+  <div class="markdown-content max-w-3xl">
+    <Content />
+  </div>
+</Layout>

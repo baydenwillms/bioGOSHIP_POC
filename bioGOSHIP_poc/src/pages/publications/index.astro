@@ -1,0 +1,23 @@
+---
+import Layout from "@layouts/default.astro";
+import Headline from "@components/headline.astro";
+import CitationList from "@components/publications/citation-list.astro";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { useTranslations } from "@utils/i18n";
+import { themeConfig } from "~/theme.config";
+
+const locale = themeConfig.i18n.defaultLocale;
+const t = useTranslations(locale);
+
+const entries = ((await getCollection("publications", ({ data }) => !data.draft)) as CollectionEntry<"publications">[]).sort((a, b) => {
+  const year = (b.data.year ?? 0) - (a.data.year ?? 0);
+  if (year !== 0) return year;
+  return a.data.title.localeCompare(b.data.title);
+});
+---
+
+<Layout title={t("pages.publications.title")} description={t("pages.publications.description")} {locale}>
+  <Headline text={t("pages.publications.title")} class="pb-10" />
+  {entries.length > 0 ? <CitationList {entries} {locale} /> : <p class="text-stone-600 dark:text-stone-300">{t("pages.publications.empty")}</p>}
+</Layout>

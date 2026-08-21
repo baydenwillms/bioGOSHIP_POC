@@ -122,4 +122,56 @@ const integration_options = defineCollection({
     }),
 });
 
-export const collections = { articles, events, faq_answers, integration_options };
+const publications = defineCollection({
+  loader: glob({ pattern: ['**/[^_]**.md'], base: './src/content/publications' }),
+  schema: () =>
+    z.object({
+      title: z.string(),
+      authors: z.string(),
+      year: z.number().optional(),
+      source: z.string().optional(),
+      doi: z.string().optional(),
+      url: httpUrl.optional(),
+      draft: z.boolean().optional(),
+    }),
+});
+
+const cruises = defineCollection({
+  loader: glob({ pattern: ['**/[^_]**.md'], base: './src/content/cruises' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      date: z.date().optional(),
+      caption: z.string().optional(),
+      draft: z.boolean().optional(),
+      image: z
+        .object({
+          file: image().optional(),
+          url: httpUrl.optional(),
+          alt: z.string().optional(),
+        })
+        .optional(),
+    }),
+});
+
+const team = defineCollection({
+  loader: glob({ pattern: ['**/[^_]**.md'], base: './src/content/team' }),
+  schema: ({ image }) =>
+    z.object({
+      name: z.string(),
+      role: z.string().optional(),
+      affiliation: z.string().optional(),
+      group: z.enum(['international', 'usa']),
+      order: z.number().optional(),
+      draft: z.boolean().optional(),
+      photo: z
+        .object({
+          file: image().optional(),
+          url: httpUrl.optional(),
+          alt: z.string().optional(),
+        })
+        .optional(),
+    }),
+});
+
+export const collections = { articles, events, faq_answers, integration_options, publications, cruises, team };

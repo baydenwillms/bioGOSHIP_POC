@@ -10,7 +10,7 @@ interface Props {
   class?: string;
 }
 
-const { page, baseUrl = 'blog', locale } = Astro.props as Props;
+const { page, baseUrl = 'posts', locale } = Astro.props as Props;
 const classOverride = Astro.props.class || 'mb-3 mt-28';
 const t = useTranslations(locale);
 

@@ -63,7 +63,7 @@ const articleEntry = await getEntry(collection, locale + '/' + Astro.params.arti
 
 const externalCanonical = articleEntry.data.externalCanonical;
 
-const headerButton = { text: t('labels.back-all-articles'), href: getLocaleUrl('blog', locale) };
+const headerButton = { text: t('labels.back-all-articles'), href: getLocaleUrl('posts', locale) };
 
 const showTopBanner = (themeConfig.promotions?.topBanner && header?.showTopBanner !== false) || header?.showTopBanner;
 ---
@@ -92,7 +92,7 @@ const showTopBanner = (themeConfig.promotions?.topBanner && header?.showTopBanne
       {themeConfig.promotions?.newsletterSignup === 'bottom' && <NewsletterSignup {locale} />}
       <Footer {locale} {isError} />
     </div>
-    <LanguageSelect {noi18n} {collection} contentId={articleEntry.id} {locale} />
+    {themeConfig.i18n.locales.length > 1 ? <LanguageSelect {noi18n} {collection} contentId={articleEntry.id} {locale} /> : null}
     <WebMCPTools {locale} />
   </body>
 </html>
