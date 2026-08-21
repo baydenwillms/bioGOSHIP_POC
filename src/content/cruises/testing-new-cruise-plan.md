@@ -1,7 +1,9 @@
 ---
-title: Testing new cruise plan
-date: 2026-08-21
-caption: this cruise was great
+title: A13.5 (2024)
+date: 2024-02-01
+caption: R/V Marcus G. Langseth
 draft: false
+image:
+  file: "@images/content/a135_2024_aframe.png"
 ---
-this cruise was really great
+GO-SHIP A13.5 ran February 1 to March 23, 2024, from Porto Grande, Cabo Verde, to Cape Town, South Africa, covering over 6,000 km aboard the R/V Marcus G. Langseth (a seismic vessel not normally configured for hydrography, requiring lab space improvisation since dedicated lab vans couldn't be used). It was the third attempt at reoccupying the A13.5 line, last fully sampled in 2010, following curtailed cruises in 2020 and 2022. The cruise completed 113 of a planned 117 CTD/rosette stations, deployed a full complement of floats and drifters (4 Core Argo, 1 Deep Argo, 11 BGC Argo, 7 EM-Apex, 18 SVP drifters), and reached a maximum latitude of 52°S, just short of the 54°S target, due to delays from fog, icebergs, and weather. Along the way the team dealt with a Ghanaian Navy EEZ incident that suspended operations for 18 hours, a failed CTD altimeter requiring a workaround using shipboard multibeam and LADCP data, a secondary winch VFD/encoder failure that was successfully repaired at sea, a 40-hour storm standby with winds up to 45 knots, and a rogue wave that swept sampling bottles overboard during Station 101. Fun facts: a pod of dolphins accompanied departure from Cabo Verde (traditionally a good omen), the crew decorated BGC-Argo floats before deployment, they crossed the equator on February 11, passed the latitude of the Cape of Good Hope, transited the Walvis Ridge (a barrier between the Angola and Cape Basins that also blocks Agulhas eddy propagation), and encountered icebergs, "bergy bits," and "growlers" (real oceanographic terms for progressively smaller ice hazards) as they pushed into the Southern Ocean's Roaring Forties.
