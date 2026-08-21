@@ -9,7 +9,7 @@ import enStrings from './src/i18n/en.json' with { type: 'json' };
 export const themeConfig: ThemeConfig = {
   // `import.meta.env?.` is guarded because this file is also imported from `ec.config.mjs`,
   // which Node loads as plain ESM where `import.meta.env` is not defined (only Vite injects it).
-  site: import.meta.env?.SITE_OVERRIDE || 'https://biogoship.org',
+  site: import.meta.env?.SITE_OVERRIDE || process.env.SITE_OVERRIDE || 'https://baydenwillms.github.io/bioGOSHIP_POC',
   primaryColor: '#282687', // mind to also update the Tailwind config if you change this!
   themeColor: '#282687',
   generateWebmanifest: true,

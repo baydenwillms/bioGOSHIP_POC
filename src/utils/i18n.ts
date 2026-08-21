@@ -110,7 +110,10 @@ export async function getLocaleUrlWithContent(entryId: string, collection: Colle
 // get path with locale
 export function getLocaleUrl(slug: string, targetLang?: keyof typeof translations, absolute?: boolean) {
   if (!targetLang) targetLang = defaultLocale;
-  if (slug === '/' && targetLang === defaultLocale) return absolute ? themeConfig.site + '/' : '/';
+  if (slug === '/' && targetLang === defaultLocale) {
+    const home = import.meta.env.BASE_URL || '/';
+    return absolute ? themeConfig.site.replace(/\/+$/, '') + (home.endsWith('/') ? home : home + '/') : home;
+  }
   const path = absolute ? getAbsoluteLocaleUrl(targetLang.toString(), slug) : getRelativeLocaleUrl(targetLang.toString(), slug);
   return path.replace(/\/$/, '');
 }
