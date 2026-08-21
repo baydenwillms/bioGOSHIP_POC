@@ -1,4 +1,8 @@
-media: src/images/content
+# Pages CMS reads this from the repository root.
+# Keep this file next to package.json (the Astro project).
+media:
+  input: src/images/content
+  output: "@images/content"
 content:
   - name: posts
     label: Posts
@@ -17,12 +21,21 @@ content:
       - name: publishDate
         type: date
         required: true
+        options:
+          format: yyyy-MM-dd
       - name: excerpt
         type: text
       - name: draft
         type: boolean
       - name: featured
         type: boolean
+      - name: image
+        type: object
+        fields:
+          - name: file
+            type: image
+          - name: alt
+            type: string
       - name: body
         type: rich-text
 
@@ -72,10 +85,19 @@ content:
         required: true
       - name: date
         type: date
+        options:
+          format: yyyy-MM-dd
       - name: caption
         type: text
       - name: draft
         type: boolean
+      - name: image
+        type: object
+        fields:
+          - name: file
+            type: image
+          - name: alt
+            type: string
       - name: body
         type: rich-text
 
@@ -96,17 +118,26 @@ content:
       - name: affiliation
         type: string
       - name: group
+        label: Team
         type: select
         required: true
         options:
-          - value: international
-            label: International
-          - value: usa
-            label: US
+          values:
+            - name: international
+              label: International
+            - name: usa
+              label: US
       - name: order
         type: number
       - name: draft
         type: boolean
+      - name: photo
+        type: object
+        fields:
+          - name: file
+            type: image
+          - name: alt
+            type: string
       - name: body
         type: rich-text
 
