@@ -4,7 +4,7 @@ import Headline from "@components/headline.astro";
 import List from "@components/blog/list.astro";
 import Pagination from "@components/blog/pagination.astro";
 import type { CollectionEntry } from "astro:content";
-import { useTranslations, getLocaleUrl } from "@utils/i18n";
+import { useTranslations, getLocaleUrl, isRoutableLocale } from "@utils/i18n";
 import { themeConfig } from '~/theme.config';
 import { sortArticleList } from "@utils/blog";
 import { getCollection } from 'astro:content';
@@ -12,8 +12,8 @@ import type { PaginateFunction } from 'astro';
 
 export async function getStaticPaths({ paginate }: { paginate: PaginateFunction }) {
   const allArticles = sortArticleList(await getCollection('articles', ({ id, data }) => {
-    // only show articles that are not drafts and mind locale
-    return !data.draft && !id.startsWith(themeConfig.i18n.defaultLocale + '/');
+    // only show articles that are not drafts and belong to a configured non-default locale
+    return !data.draft && isRoutableLocale(id.split('/')[0]);
   }) as CollectionEntry<'articles'>[]);
   const catsByLang = allArticles.reduce<Map<string, Set<string>>>((acc, article) => {
     const lang = article.id.split('/')[0];

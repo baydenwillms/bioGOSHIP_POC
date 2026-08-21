@@ -5,6 +5,16 @@ import type { CollectionKey } from 'astro:content';
 
 const defaultLocale = themeConfig.i18n.defaultLocale;
 
+/**
+ * Whether a content-id language prefix should produce a `/[lang]/...` route.
+ * Default-locale pages live at the unprefixed paths (`/blog/...`), so they are
+ * excluded. Locales missing from `themeConfig.i18n.locales` are excluded too —
+ * leftover `de/` / `es/` / `fr/` content must not generate routes.
+ */
+export function isRoutableLocale(lang: string): boolean {
+  return lang !== defaultLocale && themeConfig.i18n.locales.includes(lang);
+}
+
 // Minimal structural shape of a content entry. Used to cast results from
 // getEntry/getCollection so that an empty content config (collections = {})
 // — which makes Astro infer `never` — does not break property access.
