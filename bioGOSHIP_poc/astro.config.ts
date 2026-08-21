@@ -12,10 +12,6 @@ import { rehypeYoutubePlugin } from './src/plugins/youtube-embed';
 import { themeConfig } from './theme.config';
 import { setOnDemandPrerender, getOnDemandSitemapPages } from './src/utils/on-demand-render';
 
-import react from '@astrojs/react';
-
-import keystatic from '@keystatic/astro';
-
 // i18n config for sitemap integration
 export const sitemap_i18n = {
   defaultLocale: themeConfig.i18n.defaultLocale,
@@ -171,6 +167,6 @@ export default defineConfig({
     SVG: {
       svgo: svgoConfig,
     },
-  }), react(), keystatic()],
+  })],
 
 });
