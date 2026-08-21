@@ -119,14 +119,14 @@ export const themeConfig: ThemeConfig = {
   llms: {
     autoGeneration: true,
     intro: 'Bio-GO-SHIP is a community program that quantifies plankton diversity, abundance, and biogeochemical roles across the global ocean, in coordination with GO-SHIP physical and chemical measurements.',
-    excludePagesPattern: ['/integration/**'],
+    excludePagesPattern: [],
     includePages: [],
     addArticles: 'selected',
-    addEvents: 'all',
+    addEvents: 'none',
     addFAQ: 'all',
   },
 
   askAiTrigger: 'Explain the Bio-GO-SHIP program: its vision, mission, sampling methods, and how it connects to GO-SHIP. What community benefits does it provide?',
 
-  droppedFeatures: ['cloudflare'],
+  droppedFeatures: ['cloudflare', 'events-pages', 'pricing-page', 'docs-pages', 'integration-pages', 'examples', 'signup'],
 };

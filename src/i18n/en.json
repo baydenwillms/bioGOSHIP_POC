@@ -242,7 +242,7 @@
     },
     "legal-notice": {
       "title": "Legal Notice",
-      "intro": "Information in accordance with section 5 TMG and section 55 para. 2 RStV"
+      "intro": "Site operator information for the Bio-GO-SHIP website."
     },
     "privacy-policy": {
       "title": "Privacy Policy"
@@ -313,6 +313,9 @@
     "features": "Features",
     "troubleshooting": "Troubleshooting",
     "general": "General",
+    "sampling": "Sampling",
+    "community": "Community",
+    "data": "Data",
     "technical": "Technical",
     "support": "Support"
   },
