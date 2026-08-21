@@ -16,11 +16,11 @@ export function getStaticPaths() {
 const locale = Astro.params.lang;
 const t = useTranslations(locale);
 
-const githubIssuesUrl = "https://github.com/biogoship/bioGOSHIP_POC/issues";
+const githubIssuesUrl = "https://github.com/baydenwillms/bioGOSHIP_POC/issues";
 const emails = [
-  { name: "US team (sample)", address: "us-team@biogoship.org" },
-  { name: "International team (sample)", address: "international@biogoship.org" },
-  { name: "Program inbox (sample)", address: "info@biogoship.org" },
+  { name: "DEMO — not a real person", address: "not-a-real-person@example.com" },
+  { name: "DEMO — fake US inbox", address: "fake-us-team@example.com" },
+  { name: "DEMO — fake international inbox", address: "fake-intl-team@example.com" },
 ];
 ---
 
