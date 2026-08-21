@@ -1,9 +1,9 @@
 ---
-name: "US collaborator"
-role: "Partner"
-affiliation: "US institution"
-group: usa
-order: 2
+name: Taichi Yokokawa
+role: Senior Researcher
+affiliation: JAMSTEC (Japan)
+group: international
+order: 7
+draft: false
 ---
-
-Placeholder US team member.
+Microbial oceanographer who studies bacterial community dynamics, extracellular enzymatic activity, and particle-associated microbial processes in marine and deep-sea environments.
