@@ -1,9 +1,9 @@
 ---
 name: Sophie Clayton
-role: Partner
-affiliation: National Oceanography Center
+role: Principal Research Scientist
+affiliation: National Oceanography Centre (UK)
 group: international
-order: 5
+order: 6
 draft: false
 ---
-Placeholder international team member.
+Physical/biological oceanographer who fuses ocean circulation and biogeochemical data to study how eddies, fronts, and mixing shape plankton community distributions.
