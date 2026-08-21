@@ -8,4 +8,4 @@ draft: false
 photo:
   file: "@images/content/Luke_Thompson_AOML.jpg"
 ---
-Marine microbial ecologist who uses eDNA metabarcoding and metagenomics to study ocean biodiversity, biogeochemical cycling, and ecosystem responses to climate change.
+Marine microbial ecologist and data scientist who develops and uses eDNA tools to study ocean biodiversity, biogeochemical cycling, and ecosystem responses to climate change.
