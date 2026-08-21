@@ -1,9 +1,9 @@
 ---
-name: "International collaborator"
-role: "Partner"
-affiliation: "Partner institution"
+name: Sophie Clayton
+role: Partner
+affiliation: National Oceanography Center
 group: international
-order: 2
+order: 5
+draft: false
 ---
-
 Placeholder international team member.
