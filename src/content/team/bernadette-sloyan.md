@@ -6,6 +6,6 @@ group: international
 order: 9
 draft: false
 photo:
-  file: "@images/content/SLOYAN_photo.jpg"
+  file: "@images/content/headshots/bernadette-sloyan.jpg"
 ---
 Physical oceanographer who uses shipboard and mooring-based observations to study large-scale ocean circulation, mixing, and boundary currents in the Southern, Pacific, and Indian Oceans.

@@ -6,6 +6,6 @@ group: usa
 order: 5
 draft: false
 photo:
-  file: "@images/content/Nicole-Poulton-Bigelow-1.png"
+  file: "@images/content/headshots/nicole-poulton.png"
 ---
 Phytoplankton ecologist who uses flow cytometry and imaging cytometry to study marine microbial communities, harmful algal blooms, and the biological carbon cycle.
