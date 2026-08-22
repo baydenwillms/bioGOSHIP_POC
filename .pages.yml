@@ -70,7 +70,7 @@ content:
         type: rich-text
 
   - name: cruises
-    label: Cruise plans
+    label: Cruises
     type: collection
     path: src/content/cruises
     format: yaml-frontmatter
@@ -123,10 +123,10 @@ content:
         required: true
         options:
           values:
+            - name: usa
+              label: USA
             - name: international
               label: International
-            - name: usa
-              label: US
       - name: order
         type: number
       - name: draft
