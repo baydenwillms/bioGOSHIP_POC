@@ -13,10 +13,10 @@
     "events": "Events",
     "about": "About",
     "team": "Team",
+    "team-usa": "USA team",
+    "team-usa-explainer": "Investigators based in the United States",
     "team-international": "International team",
-    "team-international-explainer": "Investigators and partners worldwide",
-    "team-usa": "US team",
-    "team-usa-explainer": "US investigators and partners",
+    "team-international-explainer": "Investigators based outside the United States",
     "publications": "Publications",
     "cruises": "Cruises",
     "contact": "Contact",
@@ -151,10 +151,10 @@
       "description": "Bio-GO-SHIP is a community program that quantifies plankton diversity, abundance, and biogeochemical roles across the global ocean."
     },
     "team": {
+      "title-usa": "USA team",
+      "description-usa": "Investigators based in the United States.",
       "title-international": "International team",
-      "description-international": "Investigators and partners contributing to Bio-GO-SHIP worldwide.",
-      "title-usa": "US team",
-      "description-usa": "US investigators and partners in the Bio-GO-SHIP program.",
+      "description-international": "Investigators based outside the United States.",
       "empty": "Team members will appear here."
     },
     "publications": {

@@ -12,6 +12,13 @@
     "faq": "FAQ",
     "events": "Eventos",
     "about": "Acerca de",
+    "team": "Equipo",
+    "team-usa": "Equipo de EE. UU.",
+    "team-usa-explainer": "Investigadores con sede en Estados Unidos",
+    "team-international": "Equipo internacional",
+    "team-international-explainer": "Investigadores con sede fuera de Estados Unidos",
+    "publications": "Publicaciones",
+    "cruises": "Cruceros",
     "contact": "Contacto",
     "pricing": "Precios",
     "integration": "Integración",
@@ -50,6 +57,8 @@
     "back": "Atrás",
     "back-overview": "Resumen",
     "back-all-articles": "Todos los artículos",
+    "back-all-cruises": "Todos los cruceros",
+    "back-all-publications": "Todas las publicaciones",
     "back-all-events": "Todos los eventos",
     "pagination": "Paginación",
     "page": "Página",
@@ -140,6 +149,23 @@
     "about": {
       "title": "Acerca de",
       "description": "La historia detrás de Astro Stardrive: creado por Jens, que construye sitios web desde el año 2000."
+    },
+    "team": {
+      "title-usa": "Equipo de EE. UU.",
+      "description-usa": "Investigadores con sede en Estados Unidos.",
+      "title-international": "Equipo internacional",
+      "description-international": "Investigadores con sede fuera de Estados Unidos.",
+      "empty": "Aquí aparecerán los miembros del equipo."
+    },
+    "publications": {
+      "title": "Publicaciones",
+      "description": "Artículos, informes y otras publicaciones de la comunidad Bio-GO-SHIP.",
+      "empty": "Todavía no hay publicaciones listadas."
+    },
+    "cruises": {
+      "title": "Planes de cruceros",
+      "description": "Planes de cruceros de Bio-GO-SHIP próximos y recientes.",
+      "empty": "Todavía no se han publicado planes de cruceros."
     },
     "contact": {
       "title": "Contáctanos",

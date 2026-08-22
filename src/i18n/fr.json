@@ -12,6 +12,13 @@
     "faq": "FAQ",
     "events": "Événements",
     "about": "À propos",
+    "team": "Équipe",
+    "team-usa": "Équipe américaine",
+    "team-usa-explainer": "Chercheurs basés aux États-Unis",
+    "team-international": "Équipe internationale",
+    "team-international-explainer": "Chercheurs basés hors des États-Unis",
+    "publications": "Publications",
+    "cruises": "Campagnes",
     "contact": "Contact",
     "pricing": "Tarifs",
     "integration": "Intégration",
@@ -50,6 +57,8 @@
     "back": "Retour",
     "back-overview": "Aperçu",
     "back-all-articles": "Tous les articles",
+    "back-all-cruises": "Toutes les campagnes",
+    "back-all-publications": "Toutes les publications",
     "back-all-events": "Tous les événements",
     "pagination": "Pagination",
     "page": "Page",
@@ -140,6 +149,23 @@
     "about": {
       "title": "À propos",
       "description": "L'histoire derrière Astro Stardrive - créé par Jens, qui conçoit des sites web depuis l'an 2000."
+    },
+    "team": {
+      "title-usa": "Équipe américaine",
+      "description-usa": "Chercheurs basés aux États-Unis.",
+      "title-international": "Équipe internationale",
+      "description-international": "Chercheurs basés hors des États-Unis.",
+      "empty": "Les membres de l'équipe apparaîtront ici."
+    },
+    "publications": {
+      "title": "Publications",
+      "description": "Articles, rapports et autres publications de la communauté Bio-GO-SHIP.",
+      "empty": "Aucune publication répertoriée pour le moment."
+    },
+    "cruises": {
+      "title": "Plans de campagnes",
+      "description": "Plans de campagnes Bio-GO-SHIP à venir et récents.",
+      "empty": "Aucun plan de campagne publié pour le moment."
     },
     "contact": {
       "title": "Contactez-nous",

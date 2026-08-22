@@ -12,6 +12,13 @@
     "faq": "FAQ",
     "events": "Events",
     "about": "Über uns",
+    "team": "Team",
+    "team-usa": "USA-Team",
+    "team-usa-explainer": "Forschende mit Sitz in den Vereinigten Staaten",
+    "team-international": "Internationales Team",
+    "team-international-explainer": "Forschende mit Sitz außerhalb der Vereinigten Staaten",
+    "publications": "Publikationen",
+    "cruises": "Fahrten",
     "contact": "Kontakt",
     "pricing": "Preise",
     "integration": "Integration",
@@ -50,6 +57,8 @@
     "back": "Zurück",
     "back-overview": "Übersicht",
     "back-all-articles": "Alle Artikel",
+    "back-all-cruises": "Alle Fahrten",
+    "back-all-publications": "Alle Publikationen",
     "back-all-events": "Alle Events",
     "pagination": "Seitennummerierung",
     "page": "Seite",
@@ -140,6 +149,23 @@
     "about": {
       "title": "Über",
       "description": "Die Geschichte hinter Astro Stardrive - gebaut von Jens, der seit dem Jahr 2000 Websites entwickelt."
+    },
+    "team": {
+      "title-usa": "USA-Team",
+      "description-usa": "Forschende mit Sitz in den Vereinigten Staaten.",
+      "title-international": "Internationales Team",
+      "description-international": "Forschende mit Sitz außerhalb der Vereinigten Staaten.",
+      "empty": "Hier erscheinen die Teammitglieder."
+    },
+    "publications": {
+      "title": "Publikationen",
+      "description": "Paper, Berichte und weitere Publikationen der Bio-GO-SHIP-Gemeinschaft.",
+      "empty": "Noch keine Publikationen gelistet."
+    },
+    "cruises": {
+      "title": "Fahrtpläne",
+      "description": "Bevorstehende und aktuelle Bio-GO-SHIP-Fahrtpläne.",
+      "empty": "Noch keine Fahrtpläne veröffentlicht."
     },
     "contact": {
       "title": "Kontakt",
