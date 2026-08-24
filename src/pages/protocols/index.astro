@@ -1,0 +1,62 @@
+---
+import Layout from "@layouts/default.astro";
+import Headline from "@components/headline.astro";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { useTranslations, getLocaleUrl } from "@utils/i18n";
+import { themeConfig } from "~/theme.config";
+
+const locale = themeConfig.i18n.defaultLocale;
+const t = useTranslations(locale);
+
+const entries = ((await getCollection("protocols", ({ data }) => !data.draft)) as CollectionEntry<"protocols">[]).sort((a, b) => {
+  const category = a.data.category.localeCompare(b.data.category);
+  if (category !== 0) return category;
+  return a.data.title.localeCompare(b.data.title);
+});
+
+function fileHref(entry: CollectionEntry<"protocols">) {
+  const raw = entry.data.file || entry.data.url;
+  if (!raw) return undefined;
+  if (/^https?:\/\//i.test(raw)) return raw;
+  const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+  return `${base}${raw.startsWith("/") ? raw : `/${raw}`}`;
+}
+---
+
+<Layout title={t('pages.protocols.title')} description={t('pages.protocols.description')} {locale}>
+  <Headline text={t('pages.protocols.title')} class="pb-10" />
+  {
+    entries.length === 0 ? (
+      <p class="text-stone-600 dark:text-stone-300">{t('pages.protocols.empty')}</p>
+    ) : (
+      <ul class="m-0 flex list-none flex-col gap-5 p-0">
+        {entries.map((entry) => {
+          const href = fileHref(entry);
+          const detail = getLocaleUrl(`protocols/${entry.id}`, locale);
+          return (
+            <li class="m-0 rounded-xl border border-stone-200 bg-white p-5 dark:border-stone-700 dark:bg-stone-900">
+              <p class="text-secondary-dark dark:text-secondary-light m-0 text-xs font-semibold tracking-[0.16em] uppercase">{entry.data.category}</p>
+              <h2 class="mt-2 mb-2 text-lg font-bold text-stone-900 dark:text-white">
+                <a href={detail} class="text-inherit no-underline hover:underline">
+                  {entry.data.title}
+                </a>
+              </h2>
+              <p class="m-0 text-sm leading-relaxed text-stone-600 dark:text-stone-300">{entry.data.description}</p>
+              <div class="mt-3 flex flex-wrap gap-4 text-sm">
+                <a href={detail} class="text-primary dark:text-primary-light font-semibold no-underline hover:underline">
+                  {t('labels.continue-reading')}
+                </a>
+                {href && (
+                  <a href={href} class="text-primary dark:text-primary-light font-semibold no-underline hover:underline" target="_blank" rel="noopener">
+                    {t('pages.protocols.download')}
+                  </a>
+                )}
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    )
+  }
+</Layout>

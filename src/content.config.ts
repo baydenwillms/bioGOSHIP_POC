@@ -174,4 +174,19 @@ const team = defineCollection({
     }),
 });
 
-export const collections = { articles, events, faq_answers, integration_options, publications, cruises, team };
+const protocols = defineCollection({
+  loader: glob({ pattern: ['**/[^_]**.md'], base: './src/content/protocols' }),
+  schema: () =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      category: z.string(),
+      draft: z.boolean().optional(),
+      file: z.string().optional(), // public path from Pages CMS, e.g. /data/protocols/sampling.pdf
+      url: httpUrl.optional(), // external PDF or Word file, if it is not stored in this repo
+      publishDate: z.date().optional(),
+      updateDate: z.date().optional(),
+    }),
+});
+
+export const collections = { articles, events, faq_answers, integration_options, publications, cruises, team, protocols };

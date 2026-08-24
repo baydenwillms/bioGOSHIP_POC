@@ -19,6 +19,7 @@
     "team-usa-explainer": "US investigators and partners",
     "publications": "Publications",
     "cruises": "Cruises",
+    "protocols": "Protocols",
     "contact": "Contact",
     "pricing": "Pricing",
     "integration": "Integration",
@@ -59,6 +60,7 @@
     "back-all-articles": "All Posts",
     "back-all-cruises": "All Cruises",
     "back-all-publications": "All Publications",
+    "back-all-protocols": "All Protocols",
     "back-all-events": "All Events",
     "pagination": "Pagination",
     "page": "Page",
@@ -166,6 +168,12 @@
       "title": "Cruise plans",
       "description": "Upcoming and recent Bio-GO-SHIP cruise plans.",
       "empty": "No cruise plans posted yet."
+    },
+    "protocols": {
+      "title": "Protocols",
+      "description": "Sampling, analysis, and other protocols used by the Bio-GO-SHIP community.",
+      "empty": "No protocols posted yet.",
+      "download": "Download"
     },
     "contact": {
       "title": "Contact us",

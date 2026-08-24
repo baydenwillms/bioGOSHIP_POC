@@ -1,15 +1,22 @@
 # Pages CMS reads this from the repository root.
 # Keep this file next to package.json (the Astro project).
 media:
-  input: src/images/content
-  output: "@images/content"
+  - name: images
+    label: Images
+    input: src/images/content
+    output: '@images/content'
+  - name: documents
+    label: Documents
+    input: public/data/protocols
+    output: /data/protocols
+    extensions: [pdf, doc, docx]
 content:
   - name: posts
     label: Posts
     type: collection
     path: src/content/articles/en
     format: yaml-frontmatter
-    filename: "{year}-{month}-{day}-{primary}.md"
+    filename: '{year}-{month}-{day}-{primary}.md'
     view:
       primary: title
       sort: publishDate
@@ -34,6 +41,8 @@ content:
         fields:
           - name: file
             type: image
+            options:
+              media: images
           - name: alt
             type: string
       - name: body
@@ -44,7 +53,7 @@ content:
     type: collection
     path: src/content/publications
     format: yaml-frontmatter
-    filename: "{primary}.md"
+    filename: '{primary}.md'
     view:
       primary: title
       sort: year
@@ -74,7 +83,7 @@ content:
     type: collection
     path: src/content/cruises
     format: yaml-frontmatter
-    filename: "{primary}.md"
+    filename: '{primary}.md'
     view:
       primary: title
       sort: date
@@ -96,6 +105,8 @@ content:
         fields:
           - name: file
             type: image
+            options:
+              media: images
           - name: alt
             type: string
       - name: body
@@ -106,7 +117,7 @@ content:
     type: collection
     path: src/content/team
     format: yaml-frontmatter
-    filename: "{primary}.md"
+    filename: '{primary}.md'
     view:
       primary: name
     fields:
@@ -136,8 +147,53 @@ content:
         fields:
           - name: file
             type: image
+            options:
+              media: images
           - name: alt
             type: string
+      - name: body
+        type: rich-text
+
+  - name: protocols
+    label: Protocols
+    type: collection
+    path: src/content/protocols
+    format: yaml-frontmatter
+    filename: '{primary}.md'
+    view:
+      primary: title
+      sort: publishDate
+      order: desc
+    fields:
+      - name: title
+        type: string
+        required: true
+      - name: description
+        type: text
+        required: true
+      - name: category
+        type: string
+        required: true
+      - name: file
+        label: Protocol file
+        type: file
+        options:
+          media: documents
+          extensions: [pdf, doc, docx]
+      - name: url
+        label: External file URL
+        type: string
+        description: Use this if the PDF or Word file is hosted elsewhere instead of uploaded here.
+      - name: publishDate
+        type: date
+        options:
+          format: yyyy-MM-dd
+      - name: updateDate
+        type: date
+        options:
+          format: yyyy-MM-dd
+      - name: draft
+        type: boolean
       - name: body
         type: rich-text
 
@@ -146,7 +202,7 @@ content:
     type: collection
     path: src/content/faq-answers/en
     format: yaml-frontmatter
-    filename: "{primary}.md"
+    filename: '{primary}.md'
     view:
       primary: question
     fields:
