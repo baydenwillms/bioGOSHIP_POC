@@ -154,7 +154,6 @@ export default defineConfig({
   integrations: [setOnDemandPrerender, sitemap({
     i18n: sitemap_i18n,
     customPages: getOnDemandSitemapPages(),
-    customSitemaps: [themeConfig.site.replace(/\/+$/, '') + '/dynamic-events-sitemap.xml'],
   }), // Expressive Code options live in `ec.config.mjs` in the project root, so both the
   icon({
     svgoOptions: svgoConfig,

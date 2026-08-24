@@ -26,11 +26,20 @@ const items = await Promise.all(
   ) : (
     <ul class="m-0 grid list-none grid-cols-1 gap-5 p-0 sm:grid-cols-2">
       {items.map(({ entry, Content }) => (
-        <li class="m-0 flex gap-5 rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-700 dark:bg-stone-900">
+        <li class="m-0 flex items-start gap-5 rounded-xl border border-stone-200 bg-white p-6 dark:border-stone-700 dark:bg-stone-900">
           {entry.data.photo?.file ? (
-            <Image src={entry.data.photo.file} alt={entry.data.photo.alt ?? entry.data.name} class="h-20 w-20 shrink-0 rounded-lg object-cover" widths={[80, 160]} sizes="80px" />
+            <div class="aspect-square w-36 shrink-0 overflow-hidden rounded-lg sm:w-40">
+              <Image
+                src={entry.data.photo.file}
+                alt={entry.data.photo.alt ?? entry.data.name}
+                width={800}
+                widths={[320, 640, 800]}
+                sizes="(min-width: 576px) 160px, 144px"
+                class="h-full w-full object-cover object-center"
+              />
+            </div>
           ) : (
-            <span class="bg-primary/10 text-primary dark:bg-primary-darker dark:text-primary-light flex h-20 w-20 shrink-0 items-center justify-center rounded-lg text-xl font-bold" aria-hidden="true">
+            <span class="bg-primary/10 text-primary dark:bg-primary-darker dark:text-primary-light flex aspect-square w-36 shrink-0 items-center justify-center rounded-lg text-xl font-bold sm:w-40" aria-hidden="true">
               {entry.data.name
                 .split(" ")
                 .slice(0, 2)

@@ -1,9 +1,11 @@
 ---
-name: "Adam Martiny"
-role: "Investigator"
-affiliation: "University of California, Irvine"
+name: Adam Martiny
+role: Professor
+affiliation: UC Irvine & Technical University of Denmark
 group: usa
 order: 1
+draft: false
+photo:
+  file: "@images/content/headshots/adam-martiny.jpg"
 ---
-
-Placeholder profile. Replace with a real bio.
+Microbial oceanographer who combines genomics and biogeochemical modeling to study marine nutrient cycling, plankton biodiversity, and microbial adaptation to climate change.

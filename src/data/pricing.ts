@@ -139,7 +139,7 @@ export const pricingConfig: PricingConfig = {
   annualShowsMonthlyEquivalent: true,
   defaultCta: {
     labelKey: 'cta-choose',
-    href: '/signup',
+    href: '/contact',
   },
   features: [
     { id: 'projects', labelKey: 'feature-projects' },
@@ -173,7 +173,7 @@ export const pricingConfig: PricingConfig = {
       },
       cta: {
         labelKey: 'cta-start-free',
-        href: '/signup',
+        href: '/contact',
       },
     },
     {

@@ -2,7 +2,7 @@
 import Layout from "@layouts/default.astro";
 import "@styles/long-text-content.css";
 import Headline from "@components/headline.astro";
-import { useTranslations } from "@utils/i18n";
+import { useTranslations, getLocaleUrl } from "@utils/i18n";
 import { themeConfig } from '~/theme.config';
 
 const locale = themeConfig.i18n.defaultLocale;
@@ -13,19 +13,19 @@ const t = useTranslations(locale);
   <Headline text={t('pages.legal-notice.title')} class="pb-10" />
 
   <div class="long-text-content">
-    <p class="text-stone-500 italic dark:text-stone-300">{t('pages.legal-notice.intro')}:</p>
+    <p class="text-stone-500 italic dark:text-stone-300">{t('pages.legal-notice.intro')}</p>
     <p>
-      <strong>Peltmonger Ventures GmbH</strong><br />
-      Beta-Str. 10a<br />
-      85774 Unterf&ouml;hring<br />
-      Germany
+      <strong>Bio-GO-SHIP</strong><br />
+      University of California, Irvine<br />
+      Department of Earth System Science<br />
+      Irvine, CA, USA
     </p>
-    <p class="select-none">&#109;&#097;&#105;&#108;&#064;&#112;&#101;&#108;&#116;&#109;&#111;&#110;&#103;&#101;&#114;&#046;&#099;&#111;&#109;</p>
     <p>
-      Registered Office: Unterf&ouml;hring<br />
-      Commercial Register: HRB 311075, Amtsgericht M&uuml;nchen<br />
-      Managing Director: Jens K&uuml;rschner
+      Website: <a href="https://biogoship.org">https://biogoship.org</a><br />
+      This site: <a href={themeConfig.site}>{themeConfig.site}</a>
     </p>
-    <p>VAT ID: DE461635516</p>
+    <p>
+      For questions about the program or this website, use the <a href={getLocaleUrl('contact', locale)}>Contact</a> page.
+    </p>
   </div>
 </Layout>
