@@ -78,7 +78,7 @@ const isOverlayScroll = !fixed && !!overlay && !isClose;
 }
 
 <script>
-  // Hide the CSS-fixed header once the footer covers more than 30% of the viewport.
+  // Hide the CSS-fixed header when it would overlap the footer.
   // Only applies to the CSS-fixed variant (has `header-base-style` + `fixed`, no `data-overlay-scroll`).
   let _footerHideHandler: (() => void) | null = null;
   let _footerHideState = false; // whether the header is currently hidden
@@ -90,6 +90,12 @@ const isOverlayScroll = !fixed && !!overlay && !isClose;
       _footerHideHandler = null;
     }
     _footerHideState = false;
+    const header = document.getElementById('header');
+    if (header) {
+      header.style.transform = '';
+      header.style.opacity = '';
+      header.style.transition = '';
+    }
   }
 
   function setupFooterHide() {
@@ -103,15 +109,13 @@ const isOverlayScroll = !fixed && !!overlay && !isClose;
     const footer = document.querySelector('footer');
     if (!footer) return;
 
-    const threshold = 0.3; // fraction of the viewport the footer must cover
-
     const update = () => {
-      const vh = window.innerHeight;
-      const r = (footer as HTMLElement).getBoundingClientRect();
-      // How much of the viewport height is covered by the footer.
-      const covered = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
-      const ratio = vh > 0 ? covered / vh : 0;
-      const shouldHide = ratio > threshold;
+      // Hide only when the fixed header would overlap the footer. Measuring
+      // "how much of the viewport the footer covers" also hid the header on
+      // short pages (empty lists), where the footer is already on screen.
+      const headerHeight = header.getBoundingClientRect().height;
+      const footerTop = (footer as HTMLElement).getBoundingClientRect().top;
+      const shouldHide = footerTop < headerHeight;
 
       if (shouldHide === _footerHideState) return;
       _footerHideState = shouldHide;

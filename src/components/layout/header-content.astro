@@ -51,7 +51,7 @@ const { locale, button, tabIndex = 0, shrink = true, isHome, ctaButton, github }
         </span>
       </span>
     ) : (
-      <a href={getLocaleUrl('/', locale)} class="flex w-fit items-center gap-3 select-none" tabindex={tabIndex}>
+      <a href={getLocaleUrl('/', locale)} class="flex w-fit items-center gap-3 no-underline select-none hover:no-underline focus:no-underline" tabindex={tabIndex}>
         <span aria-hidden="true" class="shrink-0">
           <Logo class="logo-color h-14 w-auto dark:hidden" />
           <LogoMark class="hidden h-14 w-auto text-white dark:block" />
@@ -126,6 +126,5 @@ const { locale, button, tabIndex = 0, shrink = true, isHome, ctaButton, github }
 
   .site-wordmark__name {
     @apply text-lg font-semibold tracking-[0.04em] sm:text-xl;
-    box-shadow: inset 0 -2px 0 var(--color-accent);
   }
 </style>
