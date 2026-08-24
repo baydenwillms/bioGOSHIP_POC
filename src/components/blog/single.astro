@@ -89,10 +89,14 @@ const hideToC = tocDepth === 0 || reducedHeadings.length === 0;
       <Icon name="heroicons:list-bullet" class="h-8 w-8" />
     </button>
     <Content />
-    <div class="mt-14 flex flex-col flex-wrap gap-6 border-t border-stone-300 pt-8 dark:border-stone-700">
-      <CatTagList entries={entry.data.categories} {locale} type="categories" small={true} />
-      <CatTagList entries={entry.data.tags} {locale} type="tags" small={true} />
-    </div>
+    {
+      ((entry.data.categories && entry.data.categories.length > 0) || (entry.data.tags && entry.data.tags.length > 0)) && (
+        <div class="mt-14 flex flex-col flex-wrap gap-6 border-t border-stone-300 pt-8 dark:border-stone-700">
+          {entry.data.categories && entry.data.categories.length > 0 && <CatTagList entries={entry.data.categories} {locale} type="categories" small={true} />}
+          {entry.data.tags && entry.data.tags.length > 0 && <CatTagList entries={entry.data.tags} {locale} type="tags" small={true} />}
+        </div>
+      )
+    }
   </div>
   {
     !hideToC && (

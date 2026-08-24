@@ -36,6 +36,62 @@ content:
         type: boolean
       - name: featured
         type: boolean
+      - name: categories
+        label: Categories
+        type: select
+        options:
+          multiple: true
+          values:
+            - name: news
+              label: News
+            - name: cruise-updates
+              label: Cruise updates
+            - name: papers
+              label: Papers
+            - name: methods
+              label: Methods
+            - name: data
+              label: Data
+            - name: community
+              label: Community
+            - name: training
+              label: Training
+      - name: tags
+        label: Tags
+        type: select
+        options:
+          multiple: true
+          values:
+            - name: omics
+              label: Omics
+            - name: imaging
+              label: Imaging
+            - name: optics
+              label: Optics
+            - name: particles
+              label: Particles
+            - name: plankton
+              label: Plankton
+            - name: carbon
+              label: Carbon
+            - name: nutrients
+              label: Nutrients
+            - name: oxygen
+              label: Oxygen
+            - name: go-ship
+              label: GO-SHIP
+            - name: atlantic
+              label: Atlantic
+            - name: pacific
+              label: Pacific
+            - name: indian-ocean
+              label: Indian Ocean
+            - name: southern-ocean
+              label: Southern Ocean
+            - name: arctic
+              label: Arctic
+            - name: education
+              label: Education
       - name: image
         type: object
         fields:
