@@ -1,7 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
-import type { ImageMetadata } from "astro";
+import { getCollection } from "astro:content";
 import Reveal from "@components/reveal.astro";
 import { useTranslations, getLocaleUrl } from "@utils/i18n";
 import { themeConfig } from "~/theme.config";
@@ -10,7 +10,6 @@ import Bathymetry from "../../icons/bathymetric_map_no_numbers.svg";
 import Copepod from "../../images/phyolpic/sm_copepod.svg";
 import Pterocorys from "../../images/phyolpic/sm_pterocorys.svg";
 import Strombidiidae from "../../images/phyolpic/sm_strombidiidae.svg";
-import Shrimp from "../../images/phyolpic/md_shrimp.svg";
 import Dolphin from "../../images/phyolpic/xl_dolphin.svg";
 
 interface Props {
@@ -35,18 +34,78 @@ const features: FeatureCard[] = [
   { slug: "feature-dx", icon: "heroicons:academic-cap", accent: "accent" },
 ];
 
-interface NewsPost {
-  slug: string;
-  image?: ImageMetadata;
-  phylopic?: "copepod" | "pterocorys" | "shrimp";
+function newestBy<T>(items: T[], score: (item: T) => number): T | undefined {
+  if (items.length === 0) return undefined;
+  return [...items].sort((a, b) => score(b) - score(a))[0];
 }
 
-const posts: NewsPost[] = [
-  { slug: "voice-1", phylopic: "copepod" },
-  { slug: "voice-2", phylopic: "pterocorys" },
-  { slug: "voice-3", image: icebergPhoto },
-  { slug: "voice-4", phylopic: "shrimp" },
-];
+const articles = await getCollection("articles", ({ id, data }) => !data.draft && id.startsWith(`${locale}/`));
+const latestPost = newestBy(articles, (entry) => entry.data.publishDate.getTime());
+
+const cruises = await getCollection("cruises", ({ data }) => !data.draft);
+const latestCruise = newestBy(cruises, (entry) => entry.data.date?.getTime() ?? 0);
+
+const protocols = await getCollection("protocols", ({ data }) => !data.draft);
+const latestProtocol = newestBy(protocols, (entry) => (entry.data.updateDate ?? entry.data.publishDate)?.getTime() ?? 0);
+
+const publications = await getCollection("publications", ({ data }) => !data.draft);
+const latestPublication = [...publications].sort((a, b) => {
+  const year = (b.data.year ?? 0) - (a.data.year ?? 0);
+  if (year !== 0) return year;
+  return a.data.title.localeCompare(b.data.title);
+})[0];
+
+interface LatestCard {
+  typeKey: "latest-post" | "latest-cruise" | "latest-protocol" | "latest-publication";
+  title: string;
+  blurb: string;
+  href: string;
+  icon: string;
+}
+
+const latestCards: LatestCard[] = [];
+
+if (latestPost) {
+  latestCards.push({
+    typeKey: "latest-post",
+    title: latestPost.data.title,
+    blurb: latestPost.data.excerpt ?? "",
+    href: getLocaleUrl(`posts/${latestPost.id.split("/")[1]}`, locale),
+    icon: "heroicons:newspaper",
+  });
+}
+
+if (latestCruise) {
+  latestCards.push({
+    typeKey: "latest-cruise",
+    title: latestCruise.data.title,
+    blurb: latestCruise.data.caption ?? "",
+    href: getLocaleUrl(`cruises/${latestCruise.id}`, locale),
+    icon: "heroicons:map",
+  });
+}
+
+if (latestProtocol) {
+  latestCards.push({
+    typeKey: "latest-protocol",
+    title: latestProtocol.data.title,
+    blurb: latestProtocol.data.description,
+    href: getLocaleUrl(`protocols/${latestProtocol.id}`, locale),
+    icon: "heroicons:document-text",
+  });
+}
+
+if (latestPublication) {
+  const yearBit = latestPublication.data.year ? ` (${latestPublication.data.year})` : "";
+  const sourceBit = latestPublication.data.source ? ` · ${latestPublication.data.source}` : "";
+  latestCards.push({
+    typeKey: "latest-publication",
+    title: latestPublication.data.title,
+    blurb: `${latestPublication.data.authors}${yearBit}${sourceBit}`,
+    href: getLocaleUrl(`publications/${latestPublication.id}`, locale),
+    icon: "heroicons:book-open",
+  });
+}
 
 interface UseCase {
   slug: string;
@@ -134,14 +193,14 @@ const contactUrl = getLocaleUrl("contact", locale);
     </div>
   </div>
 
-  <!-- News as posts: image + title + description. Swap these for real posts later. -->
+  <!-- One compact card per collection: newest post, cruise, protocol, publication. -->
   <div class="relative">
     <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
       <Strombidiidae class="phylo-deco top-[18%] left-[2%] hidden h-10 w-auto sm:block" />
     </div>
     <div class="container relative z-10 mx-auto py-20">
     <section aria-labelledby="home-voices-heading">
-      <Reveal class="mb-12 flex flex-col items-center gap-3 text-center">
+      <Reveal class="mb-10 flex flex-col items-center gap-3 text-center">
         <span class="text-primary dark:text-primary-light text-sm font-semibold tracking-[0.2em] uppercase">
           {t('home-content.voices-eyebrow')}
         </span>
@@ -153,32 +212,39 @@ const contactUrl = getLocaleUrl("contact", locale);
         </p>
       </Reveal>
 
-      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        {
-          posts.map((post, i) => (
-            <Reveal delay={i * 70} from="up">
-              <article class="news-card flex h-full flex-col overflow-hidden rounded-xl border border-stone-200 bg-white dark:border-stone-700 dark:bg-stone-900">
-                <div class="news-card__media relative aspect-16/10 overflow-hidden bg-primary/6 dark:bg-white/5">
-                  {post.image ? (
-                    <Image src={post.image} alt="" class="h-full w-full object-cover" widths={[400, 720]} sizes="(min-width: 640px) 50vw, 100vw" />
-                  ) : (
-                    <span class="text-primary absolute inset-0 flex items-center justify-center opacity-20 dark:text-white dark:opacity-30" aria-hidden="true">
-                      {post.phylopic === 'pterocorys' && <Pterocorys class="phylo-outline h-28 w-auto" />}
-                      {post.phylopic === 'shrimp' && <Shrimp class="phylo-outline h-24 w-auto" />}
-                      {post.phylopic === 'copepod' && <Copepod class="phylo-outline h-24 w-auto" />}
+      {
+        latestCards.length === 0 ? (
+          <p class="text-center text-stone-600 dark:text-stone-300">{t('home-content.latest-empty')}</p>
+        ) : (
+          <ul class="m-0 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:grid-cols-4">
+            {latestCards.map((card, i) => (
+              <Reveal as="li" delay={i * 70} from="up" class="m-0">
+                <a
+                  href={card.href}
+                  class="latest-card group flex h-full flex-col gap-2 rounded-xl border border-stone-200 bg-white p-4 no-underline transition-all hover:-translate-y-0.5 hover:shadow-md dark:border-stone-700 dark:bg-stone-900"
+                >
+                  <span class="flex items-center gap-2">
+                    <span class="bg-primary/10 text-primary dark:bg-primary-darker dark:text-primary-light flex h-8 w-8 shrink-0 items-center justify-center rounded-md">
+                      <Icon name={card.icon} class="h-4 w-4" aria-hidden="true" />
                     </span>
+                    <span class="text-secondary-dark dark:text-secondary-light text-[0.7rem] font-semibold tracking-[0.16em] uppercase">
+                      {t(`home-content.${card.typeKey}`)}
+                    </span>
+                  </span>
+                  <h3 class="m-0 line-clamp-2 text-base leading-snug font-bold text-stone-900 dark:text-white">{card.title}</h3>
+                  {card.blurb && (
+                    <p class="m-0 line-clamp-2 text-sm leading-relaxed text-stone-600 dark:text-stone-300">{card.blurb}</p>
                   )}
-                </div>
-                <div class="flex flex-1 flex-col gap-2 p-6">
-                  <span class="text-secondary-dark dark:text-secondary-light text-xs font-semibold tracking-[0.16em] uppercase">{t(`home-content.${post.slug}-role`)}</span>
-                  <h3 class="text-lg font-bold">{t(`home-content.${post.slug}-name`)}</h3>
-                  <p class="text-sm leading-relaxed text-stone-600 dark:text-stone-300">{t(`home-content.${post.slug}-quote`)}</p>
-                </div>
-              </article>
-            </Reveal>
-          ))
-        }
-      </div>
+                  <span class="text-primary dark:text-primary-light mt-auto pt-1 text-sm font-semibold">
+                    {t('home-content.latest-open')}
+                    <span aria-hidden="true"> →</span>
+                  </span>
+                </a>
+              </Reveal>
+            ))}
+          </ul>
+        )
+      }
     </section>
     </div>
   </div>
