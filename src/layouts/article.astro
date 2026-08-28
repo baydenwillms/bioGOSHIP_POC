@@ -9,6 +9,7 @@ import NewsletterSignup from "@components/promo/newsletter-signup-wrapper.astro"
 import FooterBanner from "@components/promo/footer-banner.astro";
 import TopBanner from "@components/promo/top-banner.astro";
 import Footer from "@components/layout/footer.astro";
+import BackToTop from "@components/layout/back-to-top.astro";
 import Header from "@components/layout/header.astro";
 import HeadBase from "@components/head/base.astro";
 import HeadHrefLang from "@components/head/hreflang.astro";
@@ -91,6 +92,7 @@ const showTopBanner = (themeConfig.promotions?.topBanner && header?.showTopBanne
       {(themeConfig.promotions?.footerBanner && showFooterBanner !== false) || showFooterBanner ? <FooterBanner {locale} /> : null}
       {themeConfig.promotions?.newsletterSignup === 'bottom' && <NewsletterSignup {locale} />}
       <Footer {locale} {isError} />
+      <BackToTop {locale} />
     </div>
     {themeConfig.i18n.locales.length > 1 ? <LanguageSelect {noi18n} {collection} contentId={articleEntry.id} {locale} /> : null}
     <WebMCPTools {locale} />

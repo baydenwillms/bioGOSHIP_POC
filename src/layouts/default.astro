@@ -5,6 +5,7 @@ import "@fontsource/geist/800.css";
 import "@styles/global.css";
 import { ClientRouter } from 'astro:transitions';
 import Footer from "@components/layout/footer.astro";
+import BackToTop from "@components/layout/back-to-top.astro";
 import TopBanner from "@components/promo/top-banner.astro";
 import NewsletterSignup from "@components/promo/newsletter-signup-wrapper.astro";
 import FooterBanner from "@components/promo/footer-banner.astro";
@@ -119,7 +120,8 @@ const showTopBanner = (themeConfig.promotions?.topBanner && header?.showTopBanne
       </main>
       {(themeConfig.promotions?.footerBanner && showFooterBanner !== false) || showFooterBanner ? <FooterBanner {locale} /> : null}
       {themeConfig.promotions?.newsletterSignup === 'bottom' && <NewsletterSignup {locale} />}
-      <Footer {locale} {isError} {isHome} />
+      <Footer {locale} {isError} />
+      <BackToTop {locale} />
     </div>
     {themeConfig.i18n.locales.length > 1 ? <LanguageSelect {noi18n} {collection} {contentId} {locale} /> : null}
     <WebMCPTools {locale} />

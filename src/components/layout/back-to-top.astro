@@ -1,0 +1,72 @@
+---
+import { Icon } from "astro-icon/components";
+import { useTranslations } from "@utils/i18n";
+
+interface Props {
+  locale: string;
+}
+
+const { locale } = Astro.props as Props;
+const t = useTranslations(locale);
+const label = t('labels.back-to-top');
+---
+
+<button
+  id="back-to-top"
+  type="button"
+  aria-label={label}
+  title={label}
+  tabindex="-1"
+  aria-hidden="true"
+  class="bg-accent hover:bg-accent-light text-accent-contrast ring-accent-dark pointer-events-none fixed right-5 bottom-5 z-50 flex cursor-pointer items-center rounded-full p-2.5 fill-current opacity-0 shadow-lg ring-offset-white translate-y-2 transition-[opacity,transform,background-color] duration-300 select-none hover:shadow-lg focus-within:ring-2 focus-within:ring-offset-2 focus:outline-0 print:hidden dark:ring-offset-black"
+>
+  <Icon name="heroicons:arrow-up" class="h-5 w-5" aria-hidden="true" />
+</button>
+
+<script>
+  const SHOW_AFTER_PX = 400;
+
+  function isLongPage() {
+    return document.documentElement.scrollHeight > window.innerHeight * 1.5;
+  }
+
+  function updateBackToTop() {
+    const button = document.getElementById('back-to-top');
+    if (!(button instanceof HTMLButtonElement)) return;
+
+    const show = isLongPage() && window.scrollY > SHOW_AFTER_PX;
+    button.classList.toggle('opacity-0', !show);
+    button.classList.toggle('pointer-events-none', !show);
+    button.classList.toggle('translate-y-2', !show);
+    button.tabIndex = show ? 0 : -1;
+    if (show) {
+      button.removeAttribute('aria-hidden');
+    } else {
+      button.setAttribute('aria-hidden', 'true');
+    }
+  }
+
+  function handleClick() {
+    // Omit `behavior` so CSS `scroll-behavior` (and prefers-reduced-motion) apply.
+    window.scrollTo({ top: 0 });
+    const main = document.querySelector('main');
+    if (main instanceof HTMLElement) {
+      if (!main.hasAttribute('tabindex')) main.setAttribute('tabindex', '-1');
+      main.focus({ preventScroll: true });
+    }
+  }
+
+  function setupBackToTop() {
+    const button = document.getElementById('back-to-top');
+    window.removeEventListener('scroll', updateBackToTop);
+    window.removeEventListener('resize', updateBackToTop);
+    window.addEventListener('scroll', updateBackToTop, { passive: true });
+    window.addEventListener('resize', updateBackToTop, { passive: true });
+    button?.removeEventListener('click', handleClick);
+    button?.addEventListener('click', handleClick);
+    updateBackToTop();
+  }
+
+  setupBackToTop();
+  document.addEventListener('astro:page-load', setupBackToTop);
+</script>
