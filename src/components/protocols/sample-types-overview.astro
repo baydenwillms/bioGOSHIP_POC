@@ -1,0 +1,108 @@
+---
+const discreteSamples = [
+  { name: "eDNA/RNA", volume: "9 L each" },
+  { name: "Pigments (HPLC)", volume: "1-2 L" },
+  { name: "Large volume particulate organic matter (POC/N and POP)", volume: "9 L, triplicates of each" },
+  { name: "Small volume POC/N (for submission to NASA SeaBASS along with HPLC)", volume: "1-2 L, includes dry and wet blanks" },
+  { name: "Flow cytometer (FCM) discrete (preserved with glutaraldehyde)", volume: "~2 mL" },
+  { name: "Particulate inorganic carbon (PIC)", volume: "~200 mL" },
+];
+
+const inlineTimes = [
+  { label: "Morning (0600)", samples: "eDNA (x1 sterivex), HPLC (x1 GF/F), POM (x3 GF/F for POC/N, x3 GF/F for POP), FCM (x1 2 mL sample)" },
+  { label: "Noon (1200)", samples: "eDNA (x1 sterivex), RNA (x1 sterivex), HPLC (x1 GF/F), POC/N small volume (x1 GF/F + blanks), POM (x3 GF/F for POC/N, x3 GF/F for POP), FCM (x1 2 mL sample)" },
+  { label: "Evening (2000)", samples: "eDNA (x1 sterivex), HPLC (x1 GF/F), POM (x3 GF/F for POC/N, x3 GF/F for POP), FCM (x1 2 mL sample)" },
+  { label: "Midnight (0000)", samples: "eDNA (x1 sterivex), RNA (x1 sterivex)" },
+];
+
+const ctdSamples = [
+  { name: "eDNA", depths: "1000, 200, 100, 5", note: "x1 sterivex each depth" },
+  { name: "RNA", depths: "5", note: "x1 sterivex each depth" },
+  { name: "HPLC", depths: "100, 40, 5", note: "x1 GF/F each depth" },
+  { name: "POM", depths: "5", note: "x3 GF/F for POC/N, x3 GF/F for POP" },
+  { name: "FCM", depths: "1000, 500, 200, 150, 100, 75, 40, 5", note: "~2 mL sample each depth" },
+];
+---
+
+<section class="mb-0" aria-labelledby="sample-types-heading">
+  <h2 id="sample-types-heading" class="font-headline text-primary m-0 text-2xl font-bold tracking-[-0.025em] sm:text-3xl dark:text-white">Sample types</h2>
+  <div class="bg-accent mt-2 mb-8 h-0.5 w-10" aria-hidden="true"></div>
+
+  <div class="grid items-start gap-10 text-sm leading-relaxed text-stone-600 md:grid-cols-2 md:gap-x-12 md:gap-y-12 dark:text-stone-300">
+    <article>
+      <h3 class="text-primary mt-0 mb-0 text-lg font-bold dark:text-white">CTD</h3>
+      <div class="bg-accent mt-2 mb-4 h-0.5 w-10" aria-hidden="true"></div>
+      <p class="m-0">
+        CTD sampling ideally occurs 1x per day close to local noon/solar noon. If the CTD takes place within ~2 hours of local/solar noon, then this sampling effort can replace the 1200 inline sampling timepoint. Cruises that accommodate Bio-GO-SHIP sampling tend to have a separate CTD cast "bio-cast" once per day that goes to a max depth of 1000 m.
+      </p>
+      <div class="mt-4 space-y-2">
+        {
+          ctdSamples.map((row) => (
+            <p class="m-0">
+              <span class="font-semibold text-stone-800 dark:text-stone-100">{row.name}</span>
+              <span> Depths (m): {row.depths}. {row.note}</span>
+            </p>
+          ))
+        }
+      </div>
+      <div class="border-accent mt-5 border-l-2 pl-3">
+        <p class="m-0 font-semibold text-stone-800 dark:text-stone-100">Transmissometer</p>
+        <p class="mt-1 mb-0">Continuously collecting data for all CTD casts (not just biocasts)</p>
+        <p class="mt-1 mb-0">Lenses must be cleaned with isopropyl and DI 1x per day</p>
+        <p class="mt-1 mb-0">Lenses covered with electrical tape during CTD cast for a calibration "dark cast" ~1x per week</p>
+      </div>
+      <div class="border-accent mt-5 border-l-2 pl-3">
+        <p class="m-0 font-semibold text-stone-800 dark:text-stone-100">Underwater Vision Profiler (UVP5)</p>
+        <p class="mt-1 mb-0">Managed by Bio team and PI Steffi O'Daly</p>
+        <p class="mt-1 mb-0">Continuously collecting data for full depth CTD casts (settings are switched to not collect data for any shallow casts including Bio-casts)</p>
+      </div>
+    </article>
+
+    <article>
+      <h3 class="text-primary mt-0 mb-0 text-lg font-bold dark:text-white">Inline</h3>
+      <div class="bg-accent mt-2 mb-4 h-0.5 w-10" aria-hidden="true"></div>
+      <p class="m-0">
+        Inline sampling ideally uses a diaphragm or positive-displacement pump (minimizes cellular damage caused by impeller pumps) and sample water is gathered at a sink located closest to the inlet valve of surface water (minimizes shear). Inline sampling occurs 3x per day for discrete sampling, and continuously for cytometry and optics.
+      </p>
+      <p class="mt-4 mb-2 font-semibold text-stone-800 dark:text-stone-100">Discrete timepoints (local/ship-time): 0600, 1200, 2000</p>
+      <div class="space-y-2">
+        {
+          inlineTimes.map((slot) => (
+            <p class="m-0">
+              <span class="font-semibold text-stone-800 dark:text-stone-100">{slot.label}:</span> {slot.samples}
+            </p>
+          ))
+        }
+      </div>
+    </article>
+
+    <article>
+      <h3 class="text-primary mt-0 mb-0 text-lg font-bold dark:text-white">Discrete inline and CTD</h3>
+      <div class="bg-accent mt-2 mb-4 h-0.5 w-10" aria-hidden="true"></div>
+      <div class="space-y-2">
+        {
+          discreteSamples.map((sample) => (
+            <p class="m-0">
+              <span class="font-semibold text-stone-800 dark:text-stone-100">{sample.name}</span>
+              <span> Volume: {sample.volume}</span>
+            </p>
+          ))
+        }
+      </div>
+    </article>
+
+    <article>
+      <h3 class="text-primary mt-0 mb-0 text-lg font-bold dark:text-white">Bio-optics</h3>
+      <div class="bg-accent mt-2 mb-4 h-0.5 w-10" aria-hidden="true"></div>
+      <p class="m-0">Inline continuous instruments (set up near sink that drains overboard)</p>
+      <p class="mt-2 mb-0">Optical suite (can include hyper-BB or BB3 for backscatter, AC-S for absorption and attenuation, and a fast repetition rate fluorometer)</p>
+      <p class="mt-2 mb-0">Cytometry (will include onboard flow cytometer and IFCB)</p>
+      <p class="mt-2 mb-0">Particulate inorganic carbon inline sensor with a salinity sensor and a fluorometer</p>
+      <div class="border-accent mt-5 border-l-2 pl-3">
+        <p class="m-0 font-semibold text-stone-800 dark:text-stone-100">CTD-mounted instruments</p>
+        <p class="mt-1 mb-0">Transmissometer</p>
+        <p class="mt-1 mb-0">UVP</p>
+      </div>
+    </article>
+  </div>
+</section>
