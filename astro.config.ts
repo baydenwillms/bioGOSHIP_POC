@@ -1,5 +1,7 @@
+import path from 'node:path';
 import { defineConfig, svgoOptimizer } from 'astro/config';
 import type { Config } from 'svgo';
+import type { ViteDevServer } from 'vite';
 
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
@@ -11,6 +13,38 @@ import { externalLinking } from './src/plugins/external-linking';
 import { rehypeYoutubePlugin } from './src/plugins/youtube-embed';
 import { themeConfig } from './theme.config';
 import { setOnDemandPrerender, getOnDemandSitemapPages } from './src/utils/on-demand-render';
+
+/** Stops Windows `EBUSY` on `C:\DumpStack.log.tmp` from killing the Vite watcher. */
+function windowsFsWatcherGuard() {
+  return {
+    name: 'windows-fs-watcher-guard',
+    apply: 'serve' as const,
+    configureServer(server: ViteDevServer) {
+      if (process.platform !== 'win32') return;
+
+      server.watcher.on('error', (error: NodeJS.ErrnoException) => {
+        if (error.code === 'EBUSY' || error.code === 'EPERM' || error.code === 'EACCES') return;
+        throw error;
+      });
+
+      const driveRoot = path.parse(server.config.root).root;
+      const originalAdd = server.watcher.add.bind(server.watcher);
+      server.watcher.add = (paths) => {
+        const list = Array.isArray(paths) ? [...paths] : [paths];
+        const filtered = list.filter((p) => {
+          if (typeof p !== 'string') return true;
+          const resolved = path.resolve(p);
+          if (resolved === driveRoot) return false;
+          if (/DumpStack\.log\.tmp$/i.test(resolved)) return false;
+          if (/^[a-zA-Z]:[\\/]@/.test(resolved)) return false;
+          return true;
+        });
+        if (filtered.length === 0) return server.watcher;
+        return originalAdd(filtered);
+      };
+    },
+  };
+}
 
 // i18n config for sitemap integration
 export const sitemap_i18n = {
@@ -98,11 +132,13 @@ export default defineConfig({
   vite: {
     server: {
       watch: {
-        // Windows can throw EBUSY when Vite lstats C:\DumpStack.log.tmp.
-        ignored: ['**/DumpStack.log.tmp'],
+        ignored: [
+          (watchedPath: string) => /(?:^|[\\/])DumpStack\.log\.tmp$/i.test(watchedPath),
+        ],
       },
     },
     plugins: [
+      windowsFsWatcherGuard(),
       tailwindcss(),
       // The following are workarounds for issues with the Cloudflare adapter and its on-demand SSR runtime (workerd).
       // See https://docs.astro.build/en/guides/integrations-guide/cloudflare/#some-dependencies-might-need-to-be-pre-compiled for details.

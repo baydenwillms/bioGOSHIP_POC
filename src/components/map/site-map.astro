@@ -48,7 +48,7 @@ const { id, label, lat = 0, lng = 0, zoom = 2, pin = false, pinTitle = "", point
   const ATTRIBUTION = "Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri";
   const PIN_BLUE = "#282687";
   const PIN_GREEN = "#a2d12d";
-  const LINE_BLUE = "#01a8df";
+  const LINE_BLUE = PIN_BLUE;
 
   function parseCoordList(raw: string | undefined): { lat?: unknown; lng?: unknown; title?: string }[] {
     if (!raw) return [];
