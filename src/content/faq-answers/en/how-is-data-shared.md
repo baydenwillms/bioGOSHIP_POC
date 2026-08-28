@@ -7,4 +7,4 @@ category: 'data'
 
 **Data sharing follows the cruise and investigator agreements for each dataset.**
 
-This site is a public-facing program page, not the data archive itself. When public repositories or DOIs are ready, they should be linked from cruise plans, publications, or a future data section.
+This site does not host a database. Public archives are listed on the Data page. Cruise plans and publications can also point to a specific DOI when one exists.

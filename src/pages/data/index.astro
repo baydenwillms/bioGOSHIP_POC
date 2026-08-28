@@ -1,0 +1,85 @@
+---
+import Layout from "@layouts/default.astro";
+import Headline from "@components/headline.astro";
+import { Icon } from "astro-icon/components";
+import { useTranslations } from "@utils/i18n";
+import { themeConfig } from "~/theme.config";
+
+const locale = themeConfig.i18n.defaultLocale;
+const t = useTranslations(locale);
+
+interface Repository {
+  name: string;
+  href: string;
+  blurb: string;
+}
+
+const repositories: Repository[] = [
+  {
+    name: "NCEI",
+    href: "https://www.ncei.noaa.gov/",
+    blurb: "NOAA's National Centers for Environmental Information. Oceanographic and climate archives.",
+  },
+  {
+    name: "CCHDO",
+    href: "https://cchdo.ucsd.edu/",
+    blurb: "CLIVAR and Carbon Hydrographic Data Office. GO-SHIP bottle and CTD hydrography.",
+  },
+  {
+    name: "SeaBASS",
+    href: "https://seabass.gsfc.nasa.gov/",
+    blurb: "NASA's SeaWiFS Bio-optical Archive. Ocean optics, pigments, and related measurements.",
+  },
+  {
+    name: "BCO-DMO",
+    href: "https://www.bco-dmo.org/",
+    blurb: "Biological and Chemical Oceanography Data Management Office. NSF oceanography project data.",
+  },
+  {
+    name: "OBIS",
+    href: "https://obis.org/",
+    blurb: "Ocean Biodiversity Information System. Occurrence records for marine life.",
+  },
+  {
+    name: "NCBI",
+    href: "https://www.ncbi.nlm.nih.gov/",
+    blurb: "Sequence archives for 'omics data, including GenBank and the Sequence Read Archive (SRA).",
+  },
+  {
+    name: "ODE",
+    href: "https://www.oceandnaexplorer.org/",
+    blurb: "Ocean DNA Explorer. Search and visualize ocean environmental DNA datasets.",
+  },
+];
+---
+
+<Layout title={t("pages.data.title")} description={t("pages.data.description")} {locale}>
+  <Headline text={t("pages.data.title")} class="pb-6" />
+
+  <p class="mb-4 max-w-3xl text-lg text-stone-600 dark:text-stone-300">{t("pages.data.intro")}</p>
+  <p class="mb-10 max-w-3xl text-sm text-stone-500 dark:text-stone-400">{t("pages.data.note")}</p>
+
+  <ul class="m-0 grid list-none grid-cols-1 gap-5 p-0 sm:grid-cols-2">
+    {
+      repositories.map((repo) => (
+        <li class="m-0">
+          <a
+            href={repo.href}
+            target="_blank"
+            rel="noopener"
+            class="group flex h-full items-start gap-4 rounded-xl border border-stone-200 bg-white p-5 no-underline transition-all hover:-translate-y-0.5 hover:shadow-md dark:border-stone-700 dark:bg-stone-900"
+          >
+            <span class="h-11 w-11 shrink-0 rounded-lg border border-stone-200 bg-stone-50 dark:border-stone-600 dark:bg-stone-800" aria-hidden="true"></span>
+            <span class="flex min-w-0 flex-col gap-1">
+              <span class="flex items-center gap-2 text-lg font-bold text-stone-900 dark:text-white">
+                {repo.name}
+                <Icon name="heroicons:arrow-top-right-on-square" class="h-4 w-4 shrink-0 opacity-60" aria-hidden="true" />
+              </span>
+              <span class="text-sm leading-relaxed text-stone-600 dark:text-stone-300">{repo.blurb}</span>
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Layout>
