@@ -48,14 +48,32 @@ const { id, label, lat = 0, lng = 0, zoom = 2, pin = false, pinTitle = "", point
   const ATTRIBUTION = "Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri";
   const PIN_BLUE = "#282687";
   const PIN_GREEN = "#a2d12d";
+  const LINE_BLUE = "#01a8df";
+
+  function parseCoordList(raw: string | undefined): { lat?: unknown; lng?: unknown; title?: string }[] {
+    if (!raw) return [];
+    try {
+      const parsed: unknown = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function asLatLng(point: { lat?: unknown; lng?: unknown }): [number, number] | null {
+    const lat = Number(point.lat);
+    const lng = Number(point.lng);
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+    return [lat, lng];
+  }
 
   function pinIcon() {
     return L.divIcon({
-      className: "site-map-pin",
+      className: "leaflet-div-icon site-map-pin",
       html:
         '<svg width="26" height="36" viewBox="0 0 20 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-        `<path d="M10 1.25C5.3 1.25 1.5 5.05 1.5 9.75c0 6.9 8.5 16.5 8.5 16.5s8.5-9.6 8.5-16.5c0-4.7-3.8-8.5-8.5-8.5z" fill="${PIN_BLUE}" stroke="#fff" stroke-width="1.25"/>` +
-        `<circle cx="10" cy="9.75" r="3.25" fill="${PIN_GREEN}"/>` +
+        `<path d="M10 1.25C5.3 1.25 1.5 5.05 1.5 9.75c0 6.9 8.5 16.5 8.5 16.5s8.5-9.6 8.5-16.5c0-4.7-3.8-8.5-8.5-8.5z" fill="${PIN_BLUE}" stroke="#fff" stroke-width="1.75"/>` +
+        `<circle cx="10" cy="9.75" r="3.4" fill="${PIN_GREEN}"/>` +
         "</svg>",
       iconSize: [26, 36],
       iconAnchor: [13, 35],
@@ -64,7 +82,7 @@ const { id, label, lat = 0, lng = 0, zoom = 2, pin = false, pinTitle = "", point
   }
 
   function addMarker(map: L.Map, latlng: L.LatLngExpression, title: string) {
-    const marker = L.marker(latlng, { icon: pinIcon(), title, keyboard: true }).addTo(map);
+    const marker = L.marker(latlng, { icon: pinIcon(), title, keyboard: true, zIndexOffset: 1000 }).addTo(map);
     if (title) marker.bindPopup(`<strong>${title}</strong>`);
     return marker;
   }
@@ -79,18 +97,8 @@ const { id, label, lat = 0, lng = 0, zoom = 2, pin = false, pinTitle = "", point
       const zoom = Number(el.dataset.zoom);
       const pinTitle = el.dataset.pinTitle ?? "";
       const showPin = el.dataset.pin === "true";
-      let points: { lat: number; lng: number; title?: string }[] = [];
-      let line: { lat: number; lng: number }[] = [];
-      try {
-        points = JSON.parse(el.dataset.points || "[]");
-      } catch {
-        points = [];
-      }
-      try {
-        line = JSON.parse(el.dataset.line || "[]");
-      } catch {
-        line = [];
-      }
+      const points = parseCoordList(el.getAttribute("data-points") ?? el.dataset.points);
+      const line = parseCoordList(el.getAttribute("data-line") ?? el.dataset.line);
 
       const isTouch = window.matchMedia("(pointer: coarse)").matches;
 
@@ -122,35 +130,40 @@ const { id, label, lat = 0, lng = 0, zoom = 2, pin = false, pinTitle = "", point
       }
 
       for (const point of points) {
-        if (typeof point.lat !== "number" || typeof point.lng !== "number") continue;
-        addMarker(map, [point.lat, point.lng], point.title ?? "");
-        bounds.push([point.lat, point.lng]);
+        const latlng = asLatLng(point);
+        if (!latlng) continue;
+        addMarker(map, latlng, typeof point.title === "string" ? point.title : "");
+        bounds.push(latlng);
       }
 
       const lineLatLngs: L.LatLngExpression[] = [];
       for (const point of line) {
-        if (typeof point.lat !== "number" || typeof point.lng !== "number") continue;
+        const latlng = asLatLng(point);
+        if (!latlng) continue;
         const prev = lineLatLngs.length > 0 ? L.latLng(lineLatLngs[lineLatLngs.length - 1]) : null;
-        let lng = point.lng;
+        let pointLng = latlng[1];
         // Keep consecutive points on the short side of the globe so Pacific tracks can cross 180°.
         if (prev) {
-          const delta = lng - prev.lng;
-          if (delta > 180) lng -= 360;
-          else if (delta < -180) lng += 360;
+          const delta = pointLng - prev.lng;
+          if (delta > 180) pointLng -= 360;
+          else if (delta < -180) pointLng += 360;
         }
-        lineLatLngs.push([point.lat, lng]);
+        lineLatLngs.push([latlng[0], pointLng]);
       }
       if (lineLatLngs.length > 1) {
         L.polyline(lineLatLngs, {
-          color: "#282687",
+          color: LINE_BLUE,
           weight: 3,
-          opacity: 0.92,
+          opacity: 0.95,
         }).addTo(map);
         bounds.push(...lineLatLngs);
+      }
+
+      const placeLinePins = () => {
         for (const latlng of lineLatLngs) {
           addMarker(map, latlng, "");
         }
-      }
+      };
 
       if (bounds.length > 1) {
         map.fitBounds(L.latLngBounds(bounds), { padding: [48, 48], maxZoom: 7 });
@@ -158,7 +171,10 @@ const { id, label, lat = 0, lng = 0, zoom = 2, pin = false, pinTitle = "", point
         map.setView(bounds[0], Math.max(zoom, 4));
       }
 
-      requestAnimationFrame(() => map.invalidateSize());
+      requestAnimationFrame(() => {
+        map.invalidateSize();
+        if (lineLatLngs.length > 1) placeLinePins();
+      });
     });
   }
 
@@ -180,8 +196,13 @@ const { id, label, lat = 0, lng = 0, zoom = 2, pin = false, pinTitle = "", point
   }
 
   :global(.site-map-pin) {
-    background: transparent;
-    border: none;
+    background: transparent !important;
+    border: none !important;
+  }
+
+  :global(.site-map-pin svg) {
+    display: block;
+    max-width: none;
   }
 
   :global(.site-map .leaflet-control-zoom a),
