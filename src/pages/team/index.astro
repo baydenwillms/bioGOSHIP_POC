@@ -1,0 +1,42 @@
+---
+import Layout from "@layouts/default.astro";
+import Headline from "@components/headline.astro";
+import TeamList from "@components/team/team-list.astro";
+import { Icon } from "astro-icon/components";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { useTranslations } from "@utils/i18n";
+import { themeConfig } from "~/theme.config";
+import UsFlag from "../../icons/us-flag.svg";
+
+const locale = themeConfig.i18n.defaultLocale;
+const t = useTranslations(locale);
+
+function sortTeam(entries: CollectionEntry<"team">[]) {
+  return entries.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99) || a.data.name.localeCompare(b.data.name));
+}
+
+const all = (await getCollection("team", ({ data }) => !data.draft)) as CollectionEntry<"team">[];
+const usa = sortTeam(all.filter((entry) => entry.data.group === "usa"));
+const international = sortTeam(all.filter((entry) => entry.data.group === "international"));
+---
+
+<Layout title={t("pages.team.title")} description={t("pages.team.description")} {locale}>
+  <Headline text={t("pages.team.title")} class="pb-10" />
+
+  <section id="usa" class="scroll-mt-28" aria-labelledby="team-usa-heading">
+    <h2 id="team-usa-heading" class="mb-6 flex items-center gap-3 text-2xl font-bold text-stone-900 dark:text-white">
+      <UsFlag class="h-5 w-auto shrink-0 rounded-sm" />
+      {t("pages.team.title-usa")}
+    </h2>
+    <TeamList entries={usa} {locale} empty={t("pages.team.empty")} />
+  </section>
+
+  <section id="international" class="mt-16 scroll-mt-28" aria-labelledby="team-international-heading">
+    <h2 id="team-international-heading" class="mb-6 flex items-center gap-3 text-2xl font-bold text-stone-900 dark:text-white">
+      <Icon name="heroicons:globe-alt" class="text-primary dark:text-primary-light h-7 w-7 shrink-0" aria-hidden="true" />
+      {t("pages.team.title-international")}
+    </h2>
+    <TeamList entries={international} {locale} empty={t("pages.team.empty")} />
+  </section>
+</Layout>

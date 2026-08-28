@@ -48,7 +48,7 @@ const items = await Promise.all(
             </span>
           )}
           <div class="flex min-w-0 flex-col gap-1">
-            <h2 class="text-lg font-bold">{entry.data.name}</h2>
+            <h3 class="text-lg font-bold">{entry.data.name}</h3>
             {entry.data.role && <p class="text-primary dark:text-primary-light m-0 text-sm font-semibold">{entry.data.role}</p>}
             {entry.data.affiliation && <p class="m-0 text-sm text-stone-500">{entry.data.affiliation}</p>}
             <div class="markdown-content mt-2 text-sm text-stone-600 dark:text-stone-300">

@@ -38,7 +38,7 @@ In Pages CMS, pick a collection:
 | Collection | What it updates | Shows up on |
 | --- | --- | --- |
 | Posts | News / blog entries | `/posts` |
-| Team | Name, role, affiliation, photo, bio | `/team/international` or `/team/usa` (set **Team** to International or US) |
+| Team | Name, role, affiliation, photo, bio | `/team` (set **Team** to USA or International) |
 | Cruise plans | Title, date, caption, photo, writeup | `/cruises` |
 | Publications | Citation fields and optional notes | `/publications` |
 | FAQ | Question, category, answer | `/faq` |
