@@ -10,36 +10,45 @@ interface Props {
 const { entries, locale } = Astro.props;
 
 function doiHref(doi?: string, url?: string) {
-  if (url) return url;
-  if (!doi) return undefined;
-  return doi.startsWith("http") ? doi : `https://doi.org/${doi.replace(/^doi:/i, "")}`;
+  if (doi) return doi.startsWith("http") ? doi : `https://doi.org/${doi.replace(/^doi:/i, "")}`;
+  return url;
 }
 
-function citation(entry: CollectionEntry<"publications">) {
-  const { authors, year, title, source } = entry.data;
-  const yearBit = year ? ` (${year})` : "";
-  const sourceBit = source ? ` ${source}.` : "";
-  return `${authors}${yearBit}. ${title}.${sourceBit}`;
+function doiLabel(doi?: string) {
+  if (!doi) return undefined;
+  return doi.replace(/^https?:\/\/(dx\.)?doi\.org\//i, "").replace(/^doi:/i, "");
 }
 ---
 
-<ol class="m-0 flex list-none flex-col gap-5 p-0">
+<ol class="m-0 flex list-none flex-col gap-6 p-0">
   {
     entries.map((entry) => {
       const href = doiHref(entry.data.doi, entry.data.url);
       const detail = getLocaleUrl(`publications/${entry.id}`, locale);
+      const doi = doiLabel(entry.data.doi);
+      const meta = [entry.data.year, entry.data.source].filter(Boolean).join(" · ");
       return (
-        <li class="m-0 rounded-xl border border-stone-200 bg-white p-5 dark:border-stone-700 dark:bg-stone-900">
-          <p class="m-0 text-sm leading-relaxed text-stone-800 dark:text-stone-200">{citation(entry)}</p>
-          <div class="mt-3 flex flex-wrap gap-4 text-sm">
+        <li class="m-0 rounded-xl border border-stone-200 bg-white p-6 transition-shadow hover:shadow-md dark:border-stone-700 dark:bg-stone-900">
+          {meta && <p class="text-secondary-dark dark:text-secondary-light m-0 text-xs font-semibold tracking-[0.16em] uppercase">{meta}</p>}
+          <h2 class="font-headline mt-2 mb-0 text-xl leading-snug font-bold text-balance text-stone-900 sm:text-2xl dark:text-white">
+            <a href={detail} class="text-inherit no-underline hover:underline">
+              {entry.data.title}
+            </a>
+          </h2>
+          <p class="mt-3 mb-0 text-sm leading-relaxed text-stone-600 dark:text-stone-400">{entry.data.authors}</p>
+          <div class="mt-5 flex flex-wrap items-center gap-3 text-sm">
             <a href={detail} class="text-primary dark:text-primary-light font-semibold no-underline hover:underline">
               Abstract
             </a>
-            {href && (
-              <a href={href} class="text-primary dark:text-primary-light font-semibold no-underline hover:underline" target="_blank" rel="noopener">
-                {entry.data.doi ? "DOI" : "Link"}
+            {doi && href ? (
+              <a href={href} class="rounded-full border border-stone-200 px-3 py-1 font-mono text-xs font-medium text-stone-700 no-underline hover:border-stone-400 dark:border-stone-600 dark:text-stone-300 dark:hover:border-stone-400" target="_blank" rel="noopener">
+                {doi}
               </a>
-            )}
+            ) : href ? (
+              <a href={href} class="text-primary dark:text-primary-light font-semibold no-underline hover:underline" target="_blank" rel="noopener">
+                Link
+              </a>
+            ) : null}
           </div>
         </li>
       );

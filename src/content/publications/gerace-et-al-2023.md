@@ -3,4 +3,5 @@ title: "Depth variance in the stoichiometry of marine organic matter and the imp
 authors: "S. Gerace et al."
 year: 2023
 source: "Global Biogeochemical Cycles"
+doi: "10.1029/2023GB007814"
 ---

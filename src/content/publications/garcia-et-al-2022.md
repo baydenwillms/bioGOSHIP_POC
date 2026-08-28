@@ -3,4 +3,5 @@ title: "The diel cycle of surface ocean elemental stoichiometry has implications
 authors: "N. S. Garcia, D. Talmy, W. W. Fu, A. A. Larkin, J. E. Lee, and A. C. Martiny"
 year: 2022
 source: "Global Biogeochemical Cycles"
+doi: "10.1029/2021GB007092"
 ---

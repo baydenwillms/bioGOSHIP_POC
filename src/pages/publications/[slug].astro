@@ -19,7 +19,7 @@ if (!entry) return Astro.rewrite("/404_dynamic");
 
 const { Content } = await render(entry);
 const doi = entry.data.doi;
-const href = entry.data.url || (doi ? (doi.startsWith("http") ? doi : `https://doi.org/${doi.replace(/^doi:/i, "")}`) : undefined);
+const href = doi ? (doi.startsWith("http") ? doi : `https://doi.org/${doi.replace(/^doi:/i, "")}`) : entry.data.url;
 ---
 
 <Layout title={entry.data.title} description={entry.data.authors} header={{ button: { text: t("labels.back-all-publications"), href: getLocaleUrl("publications", locale) } }} {locale}>
