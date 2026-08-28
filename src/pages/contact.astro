@@ -1,6 +1,7 @@
 ---
 import Layout from "@layouts/default.astro";
 import Headline from "@components/headline.astro";
+import SiteMap from "@components/map/site-map.astro";
 import { Icon } from "astro-icon/components";
 import { useTranslations, getLocaleUrl } from "@utils/i18n";
 import { themeConfig } from '~/theme.config';
@@ -69,6 +70,15 @@ const emails = [
           Department of Earth System Science<br />
           Irvine, CA, USA
         </address>
+        <SiteMap
+          id="contact-map"
+          label={t("pages.contact.map-label")}
+          lat={33.6442}
+          lng={-117.8447}
+          zoom={15}
+          pin
+          pinTitle={t("pages.contact.map-pin-title")}
+        />
       </div>
     </aside>
   </div>

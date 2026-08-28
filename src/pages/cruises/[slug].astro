@@ -1,6 +1,7 @@
 ---
 import Layout from "@layouts/default.astro";
 import Headline from "@components/headline.astro";
+import SiteMap from "@components/map/site-map.astro";
 import { Image } from "astro:assets";
 import { getCollection, getEntry, render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
@@ -32,6 +33,7 @@ const { Content } = await render(entry);
       </figure>
     )
   }
+  <SiteMap id={`cruise-map-${entry.id}`} label={t("pages.cruises.map-label")} points={entry.data.map?.points} class="mb-8 mt-0 h-72 sm:h-96" />
   <div class="markdown-content max-w-3xl">
     <Content />
   </div>

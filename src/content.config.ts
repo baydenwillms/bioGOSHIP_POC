@@ -151,6 +151,19 @@ const cruises = defineCollection({
           alt: z.string().optional(),
         })
         .optional(),
+      map: z
+        .object({
+          points: z
+            .array(
+              z.object({
+                lat: z.number(),
+                lng: z.number(),
+                title: z.string().optional(),
+              }),
+            )
+            .optional(),
+        })
+        .optional(),
     }),
 });
 

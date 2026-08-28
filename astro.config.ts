@@ -96,6 +96,12 @@ export default defineConfig({
   },
 
   vite: {
+    server: {
+      watch: {
+        // Windows can throw EBUSY when Vite lstats C:\DumpStack.log.tmp.
+        ignored: ['**/DumpStack.log.tmp'],
+      },
+    },
     plugins: [
       tailwindcss(),
       // The following are workarounds for issues with the Cloudflare adapter and its on-demand SSR runtime (workerd).
