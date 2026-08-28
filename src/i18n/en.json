@@ -18,6 +18,7 @@
     "team-international": "International team",
     "team-international-explainer": "Investigators based outside the United States",
     "publications": "Publications",
+    "data": "Data",
     "cruises": "Cruises",
     "protocols": "Protocols",
     "contact": "Contact",
@@ -153,6 +154,8 @@
       "description": "Bio-GO-SHIP is a community program that quantifies plankton diversity, abundance, and biogeochemical roles across the global ocean."
     },
     "team": {
+      "title": "Team",
+      "description": "Investigators in the Bio-GO-SHIP community.",
       "title-usa": "USA team",
       "description-usa": "Investigators based in the United States.",
       "title-international": "International team",
@@ -164,10 +167,17 @@
       "description": "Papers, reports, and other publications from the Bio-GO-SHIP community.",
       "empty": "No publications listed yet."
     },
+    "data": {
+      "title": "Data",
+      "description": "Where to find Bio-GO-SHIP data in public archives.",
+      "intro": "This site does not host a database. Bio-GO-SHIP data is published in community archives. These are the general landing pages to start from.",
+      "note": "Keeping this list accurate means datasets need to stay published and current in those archives as they are released."
+    },
     "cruises": {
       "title": "Cruise plans",
       "description": "Upcoming and recent Bio-GO-SHIP cruise plans.",
-      "empty": "No cruise plans posted yet."
+      "empty": "No cruise plans posted yet.",
+      "map-label": "Cruise map. Track not plotted yet."
     },
     "protocols": {
       "title": "Protocols",
@@ -183,6 +193,8 @@
       "docs-text": "The FAQ covers how Bio-GO-SHIP works and how to get involved.",
       "docs-cta": "Read the FAQ",
       "address-heading": "Program home",
+      "map-label": "Map showing the Bio-GO-SHIP program home at UC Irvine",
+      "map-pin-title": "Bio-GO-SHIP, UC Irvine",
       "issues-heading": "GitHub Issues",
       "issues-text": "Report a problem, ask a question, or request a change on our GitHub Issues page.",
       "issues-cta": "Open an issue",
