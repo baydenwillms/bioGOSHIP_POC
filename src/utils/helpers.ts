@@ -12,6 +12,45 @@ export function stringToColor(str?: string) {
   return color;
 }
 
+function hashString(str: string) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return Math.abs(hash);
+}
+
+/**
+ * Distinct colors for map tracks. A fixed qualitative palette (readable on
+ * Esri ocean tiles) is assigned by stable id hash; extras use golden-angle hues.
+ */
+const TRACK_PALETTE = ['#282687', '#6b8f12', '#c45c26', '#0f766e', '#a21caf', '#b45309', '#1d4ed8', '#9f1239', '#365314', '#6d28d9'];
+
+export function colorsForIds(ids: readonly string[]): string[] {
+  const unique = [...new Set(ids)];
+  const sorted = [...unique].sort();
+  const colorById = new Map<string, string>();
+  const used = new Set<number>();
+  let extra = 0;
+
+  for (const id of sorted) {
+    if (used.size < TRACK_PALETTE.length) {
+      let idx = hashString(id) % TRACK_PALETTE.length;
+      while (used.has(idx)) idx = (idx + 1) % TRACK_PALETTE.length;
+      used.add(idx);
+      const color = TRACK_PALETTE.at(idx);
+      colorById.set(id, color ?? TRACK_PALETTE[0]);
+    } else {
+      let hue = (hashString(id) + extra * 137.508) % 360;
+      extra += 1;
+      if (hue > 195 && hue < 235) hue = (hue + 55) % 360;
+      colorById.set(id, `hsl(${Math.round(hue)} 58% 38%)`);
+    }
+  }
+
+  return ids.map((id) => colorById.get(id) ?? TRACK_PALETTE[0]);
+}
+
 // format just the time part (HH:mm)
 export const formatTime = (d: Date) => d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
 

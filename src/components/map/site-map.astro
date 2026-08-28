@@ -5,6 +5,16 @@ export interface MapPoint {
   title?: string;
 }
 
+export interface MapTrack {
+  id: string;
+  title: string;
+  href?: string;
+  color: string;
+  dashArray?: string;
+  points?: MapPoint[];
+  line?: MapPoint[];
+}
+
 interface Props {
   id: string;
   label: string;
@@ -16,10 +26,27 @@ interface Props {
   points?: MapPoint[];
   /** Ordered track points. Drawn as a polyline when there are at least two. */
   line?: MapPoint[];
+  /** Multiple color-coded cruise tracks (overview maps). */
+  tracks?: MapTrack[];
+  /** Cap for fitBounds. Lower on world overviews so one short track cannot zoom the globe away. */
+  fitMaxZoom?: number;
   class?: string;
 }
 
-const { id, label, lat = 0, lng = 0, zoom = 2, pin = false, pinTitle = "", points = [], line = [], class: className = "" } = Astro.props;
+const {
+  id,
+  label,
+  lat = 0,
+  lng = 0,
+  zoom = 2,
+  pin = false,
+  pinTitle = "",
+  points = [],
+  line = [],
+  tracks = [],
+  fitMaxZoom = 7,
+  class: className = "",
+} = Astro.props;
 ---
 
 <div
@@ -31,10 +58,12 @@ const { id, label, lat = 0, lng = 0, zoom = 2, pin = false, pinTitle = "", point
   data-lat={lat}
   data-lng={lng}
   data-zoom={zoom}
+  data-fit-max-zoom={fitMaxZoom}
   data-pin={pin ? "true" : "false"}
   data-pin-title={pinTitle}
   data-points={JSON.stringify(points)}
   data-line={JSON.stringify(line)}
+  data-tracks={JSON.stringify(tracks)}
 >
 </div>
 
@@ -50,7 +79,18 @@ const { id, label, lat = 0, lng = 0, zoom = 2, pin = false, pinTitle = "", point
   const PIN_GREEN = "#a2d12d";
   const LINE_BLUE = PIN_BLUE;
 
-  function parseCoordList(raw: string | undefined): { lat?: unknown; lng?: unknown; title?: string }[] {
+  type Coord = { lat?: unknown; lng?: unknown; title?: string };
+  type Track = {
+    id?: unknown;
+    title?: unknown;
+    href?: unknown;
+    color?: unknown;
+    dashArray?: unknown;
+    points?: Coord[];
+    line?: Coord[];
+  };
+
+  function parseCoordList(raw: string | undefined): Coord[] {
     if (!raw) return [];
     try {
       const parsed: unknown = JSON.parse(raw);
@@ -60,11 +100,50 @@ const { id, label, lat = 0, lng = 0, zoom = 2, pin = false, pinTitle = "", point
     }
   }
 
-  function asLatLng(point: { lat?: unknown; lng?: unknown }): [number, number] | null {
+  function parseTracks(raw: string | undefined): Track[] {
+    if (!raw) return [];
+    try {
+      const parsed: unknown = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return [];
+      return parsed.filter((item): item is Track => typeof item === "object" && item !== null);
+    } catch {
+      return [];
+    }
+  }
+
+  function asLatLng(point: Coord): [number, number] | null {
     const lat = Number(point.lat);
     const lng = Number(point.lng);
     if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
     return [lat, lng];
+  }
+
+  function unwrapLine(points: Coord[]): L.LatLngExpression[] {
+    const lineLatLngs: L.LatLngExpression[] = [];
+    for (const point of points) {
+      const latlng = asLatLng(point);
+      if (!latlng) continue;
+      const prev = lineLatLngs.length > 0 ? L.latLng(lineLatLngs[lineLatLngs.length - 1]) : null;
+      let pointLng = latlng[1];
+      // Keep consecutive points on the short side of the globe so Pacific tracks can cross 180°.
+      if (prev) {
+        const delta = pointLng - prev.lng;
+        if (delta > 180) pointLng -= 360;
+        else if (delta < -180) pointLng += 360;
+      }
+      lineLatLngs.push([latlng[0], pointLng]);
+    }
+    return lineLatLngs;
+  }
+
+  function escapeHtml(value: string) {
+    return value.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function popupHtml(title: string, href?: string) {
+    const safeTitle = escapeHtml(title);
+    if (!href) return `<strong>${safeTitle}</strong>`;
+    return `<a href="${escapeHtml(href)}"><strong>${safeTitle}</strong></a>`;
   }
 
   function pinIcon() {
@@ -83,7 +162,19 @@ const { id, label, lat = 0, lng = 0, zoom = 2, pin = false, pinTitle = "", point
 
   function addMarker(map: L.Map, latlng: L.LatLngExpression, title: string) {
     const marker = L.marker(latlng, { icon: pinIcon(), title, keyboard: true, zIndexOffset: 1000 }).addTo(map);
-    if (title) marker.bindPopup(`<strong>${title}</strong>`);
+    if (title) marker.bindPopup(`<strong>${escapeHtml(title)}</strong>`);
+    return marker;
+  }
+
+  function addCircle(map: L.Map, latlng: L.LatLngExpression, color: string, html: string) {
+    const marker = L.circleMarker(latlng, {
+      radius: 8,
+      color: "#fff",
+      weight: 2,
+      fillColor: color,
+      fillOpacity: 1,
+    }).addTo(map);
+    marker.bindPopup(html);
     return marker;
   }
 
@@ -95,10 +186,12 @@ const { id, label, lat = 0, lng = 0, zoom = 2, pin = false, pinTitle = "", point
       const lat = Number(el.dataset.lat);
       const lng = Number(el.dataset.lng);
       const zoom = Number(el.dataset.zoom);
+      const fitMaxZoom = Number(el.dataset.fitMaxZoom);
       const pinTitle = el.dataset.pinTitle ?? "";
       const showPin = el.dataset.pin === "true";
       const points = parseCoordList(el.getAttribute("data-points") ?? el.dataset.points);
       const line = parseCoordList(el.getAttribute("data-line") ?? el.dataset.line);
+      const tracks = parseTracks(el.getAttribute("data-tracks") ?? el.dataset.tracks);
 
       const isTouch = window.matchMedia("(pointer: coarse)").matches;
 
@@ -123,57 +216,76 @@ const { id, label, lat = 0, lng = 0, zoom = 2, pin = false, pinTitle = "", point
       }).addTo(map);
 
       const bounds: L.LatLngExpression[] = [];
+      const lineLatLngsForPins: L.LatLngExpression[] = [];
 
-      if (showPin) {
-        addMarker(map, [lat, lng], pinTitle);
-        bounds.push([lat, lng]);
-      }
+      if (tracks.length > 0) {
+        for (const track of tracks) {
+          const color = typeof track.color === "string" && track.color ? track.color : LINE_BLUE;
+          const title = typeof track.title === "string" ? track.title : "";
+          const href = typeof track.href === "string" ? track.href : undefined;
+          const html = popupHtml(title, href);
+          const dashArray = typeof track.dashArray === "string" && track.dashArray ? track.dashArray : undefined;
 
-      for (const point of points) {
-        const latlng = asLatLng(point);
-        if (!latlng) continue;
-        addMarker(map, latlng, typeof point.title === "string" ? point.title : "");
-        bounds.push(latlng);
-      }
+          const trackLine = unwrapLine(Array.isArray(track.line) ? track.line : []);
+          if (trackLine.length > 1) {
+            L.polyline(trackLine, {
+              color,
+              weight: 4,
+              opacity: 0.95,
+              dashArray,
+            })
+              .bindPopup(html)
+              .addTo(map);
+            bounds.push(...trackLine);
+          }
 
-      const lineLatLngs: L.LatLngExpression[] = [];
-      for (const point of line) {
-        const latlng = asLatLng(point);
-        if (!latlng) continue;
-        const prev = lineLatLngs.length > 0 ? L.latLng(lineLatLngs[lineLatLngs.length - 1]) : null;
-        let pointLng = latlng[1];
-        // Keep consecutive points on the short side of the globe so Pacific tracks can cross 180°.
-        if (prev) {
-          const delta = pointLng - prev.lng;
-          if (delta > 180) pointLng -= 360;
-          else if (delta < -180) pointLng += 360;
+          for (const point of Array.isArray(track.points) ? track.points : []) {
+            const latlng = asLatLng(point);
+            if (!latlng) continue;
+            addCircle(map, latlng, color, html);
+            bounds.push(latlng);
+          }
         }
-        lineLatLngs.push([latlng[0], pointLng]);
-      }
-      if (lineLatLngs.length > 1) {
-        L.polyline(lineLatLngs, {
-          color: LINE_BLUE,
-          weight: 3,
-          opacity: 0.95,
-        }).addTo(map);
-        bounds.push(...lineLatLngs);
+      } else {
+        if (showPin) {
+          addMarker(map, [lat, lng], pinTitle);
+          bounds.push([lat, lng]);
+        }
+
+        for (const point of points) {
+          const latlng = asLatLng(point);
+          if (!latlng) continue;
+          addMarker(map, latlng, typeof point.title === "string" ? point.title : "");
+          bounds.push(latlng);
+        }
+
+        const lineLatLngs = unwrapLine(line);
+        if (lineLatLngs.length > 1) {
+          L.polyline(lineLatLngs, {
+            color: LINE_BLUE,
+            weight: 3,
+            opacity: 0.95,
+          }).addTo(map);
+          bounds.push(...lineLatLngs);
+          lineLatLngsForPins.push(...lineLatLngs);
+        }
       }
 
-      const placeLinePins = () => {
-        for (const latlng of lineLatLngs) {
-          addMarker(map, latlng, "");
-        }
-      };
+      const maxZoom = Number.isFinite(fitMaxZoom) && fitMaxZoom > 0 ? fitMaxZoom : 7;
 
       if (bounds.length > 1) {
-        map.fitBounds(L.latLngBounds(bounds), { padding: [48, 48], maxZoom: 7 });
+        map.fitBounds(L.latLngBounds(bounds), { padding: [48, 48], maxZoom });
       } else if (bounds.length === 1) {
         map.setView(bounds[0], Math.max(zoom, 4));
       }
 
       requestAnimationFrame(() => {
         map.invalidateSize();
-        if (lineLatLngs.length > 1) placeLinePins();
+        if (lineLatLngsForPins.length > 1) {
+          for (const latlng of lineLatLngsForPins) {
+            addMarker(map, latlng, "");
+          }
+        }
       });
     });
   }
@@ -224,5 +336,12 @@ const { id, label, lat = 0, lng = 0, zoom = 2, pin = false, pinTitle = "", point
   }
   :global(.dark) .site-map :global(.leaflet-control-attribution a) {
     color: #a8a29e;
+  }
+  :global(.site-map .leaflet-popup-content a) {
+    color: #282687;
+    font-weight: 600;
+  }
+  :global(.dark) .site-map :global(.leaflet-popup-content a) {
+    color: #c4c4ef;
   }
 </style>
