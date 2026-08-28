@@ -14,15 +14,17 @@ interface Props {
   pin?: boolean;
   pinTitle?: string;
   points?: MapPoint[];
+  /** Ordered track points. Drawn as a polyline when there are at least two. */
+  line?: MapPoint[];
   class?: string;
 }
 
-const { id, label, lat = 0, lng = 0, zoom = 2, pin = false, pinTitle = "", points = [], class: className = "" } = Astro.props;
+const { id, label, lat = 0, lng = 0, zoom = 2, pin = false, pinTitle = "", points = [], line = [], class: className = "" } = Astro.props;
 ---
 
 <div
   id={id}
-  class:list={["site-map mt-4 h-64 w-full overflow-hidden rounded-lg border border-stone-300 bg-stone-100 sm:h-72 dark:border-stone-700 dark:bg-stone-800", className]}
+  class:list={["site-map overflow-hidden rounded-lg border border-stone-300 bg-stone-100 dark:border-stone-700 dark:bg-stone-800", className || "mt-4 h-64 w-full sm:h-72"]}
   role="img"
   aria-label={label}
   data-site-map
@@ -32,6 +34,7 @@ const { id, label, lat = 0, lng = 0, zoom = 2, pin = false, pinTitle = "", point
   data-pin={pin ? "true" : "false"}
   data-pin-title={pinTitle}
   data-points={JSON.stringify(points)}
+  data-line={JSON.stringify(line)}
 >
 </div>
 
@@ -75,10 +78,16 @@ const { id, label, lat = 0, lng = 0, zoom = 2, pin = false, pinTitle = "", point
       const pinTitle = el.dataset.pinTitle ?? "";
       const showPin = el.dataset.pin === "true";
       let points: { lat: number; lng: number; title?: string }[] = [];
+      let line: { lat: number; lng: number }[] = [];
       try {
         points = JSON.parse(el.dataset.points || "[]");
       } catch {
         points = [];
+      }
+      try {
+        line = JSON.parse(el.dataset.line || "[]");
+      } catch {
+        line = [];
       }
 
       const isTouch = window.matchMedia("(pointer: coarse)").matches;
@@ -116,8 +125,32 @@ const { id, label, lat = 0, lng = 0, zoom = 2, pin = false, pinTitle = "", point
         bounds.push([point.lat, point.lng]);
       }
 
+      const lineLatLngs: L.LatLngExpression[] = [];
+      for (const point of line) {
+        if (typeof point.lat !== "number" || typeof point.lng !== "number") continue;
+        const prev = lineLatLngs.length > 0 ? L.latLng(lineLatLngs[lineLatLngs.length - 1]) : null;
+        let lng = point.lng;
+        // Keep consecutive points on the short side of the globe so Pacific tracks can cross 180°.
+        if (prev) {
+          const delta = lng - prev.lng;
+          if (delta > 180) lng -= 360;
+          else if (delta < -180) lng += 360;
+        }
+        lineLatLngs.push([point.lat, lng]);
+      }
+      if (lineLatLngs.length > 1) {
+        L.polyline(lineLatLngs, {
+          color: "#282687",
+          weight: 3,
+          opacity: 0.92,
+        }).addTo(map);
+        bounds.push(...lineLatLngs);
+      }
+
       if (bounds.length > 1) {
         map.fitBounds(L.latLngBounds(bounds), { padding: [48, 48], maxZoom: 7 });
+      } else if (bounds.length === 1) {
+        map.setView(bounds[0], Math.max(zoom, 4));
       }
 
       requestAnimationFrame(() => map.invalidateSize());

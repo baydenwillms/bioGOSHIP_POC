@@ -179,7 +179,7 @@
       "title": "Cruise plans",
       "description": "Upcoming and recent Bio-GO-SHIP cruise plans.",
       "empty": "No cruise plans posted yet.",
-      "map-label": "Cruise map. Track not plotted yet."
+      "map-label": "Cruise map"
     },
     "protocols": {
       "title": "Protocols",

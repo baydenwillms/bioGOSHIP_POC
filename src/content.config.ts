@@ -162,6 +162,14 @@ const cruises = defineCollection({
               }),
             )
             .optional(),
+          line: z
+            .array(
+              z.object({
+                lat: z.number(),
+                lng: z.number(),
+              }),
+            )
+            .optional(),
         })
         .optional(),
     }),

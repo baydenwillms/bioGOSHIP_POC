@@ -39,7 +39,7 @@ In Pages CMS, pick a collection:
 | --- | --- | --- |
 | Posts | News / blog entries | `/posts` |
 | Team | Name, role, affiliation, photo, bio | `/team` (set **Team** to USA or International) |
-| Cruise plans | Title, date, caption, photo, writeup | `/cruises` |
+| Cruise plans | Title, date, caption, photo, writeup, map pins, cruise line | `/cruises` |
 | Publications | Citation fields and optional notes | `/publications` |
 | FAQ | Question, category, answer | `/faq` |
 

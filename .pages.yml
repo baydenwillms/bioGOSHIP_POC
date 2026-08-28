@@ -165,6 +165,47 @@ content:
               media: images
           - name: alt
             type: string
+      - name: map
+        label: Map
+        type: object
+        fields:
+          - name: points
+            label: Pins
+            description: Optional station or port markers. Latitude and longitude in decimal degrees (negative for south / west).
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{title} ({lat}, {lng})"
+            fields:
+              - name: lat
+                label: Latitude
+                type: number
+                required: true
+              - name: lng
+                label: Longitude
+                type: number
+                required: true
+              - name: title
+                label: Label
+                type: string
+          - name: line
+            label: Cruise line
+            description: Ordered points that draw the cruise track. Add them in order along the line (start, then waypoints, then end).
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{index}: {lat}, {lng}"
+            fields:
+              - name: lat
+                label: Latitude
+                type: number
+                required: true
+              - name: lng
+                label: Longitude
+                type: number
+                required: true
       - name: body
         type: rich-text
 

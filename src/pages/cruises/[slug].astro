@@ -20,20 +20,32 @@ const entry = (await getEntry("cruises", Astro.params.slug as string)) as Collec
 if (!entry) return Astro.rewrite("/404_dynamic");
 
 const { Content } = await render(entry);
+const points = entry.data.map?.points ?? [];
+const line = entry.data.map?.line ?? [];
+const hasImage = Boolean(entry.data.image?.file);
+const hasMap = points.length > 0 || line.length > 1;
 ---
 
 <Layout title={entry.data.title} description={entry.data.caption} header={{ button: { text: t("labels.back-all-cruises"), href: getLocaleUrl("cruises", locale) } }} {locale}>
   <Headline text={entry.data.title} class="pb-4" />
   {entry.data.date && <p class="mb-6 text-sm text-stone-500">{entry.data.date.toLocaleDateString(locale, { dateStyle: "long" })}</p>}
   {
-    entry.data.image?.file && (
-      <figure class="mb-8 overflow-hidden rounded-xl">
-        <Image src={entry.data.image.file} alt={entry.data.image.alt ?? ""} class="w-full" widths={[800, 1280]} sizes="100vw" />
-        {entry.data.caption && <figcaption class="mt-3 text-sm text-stone-600 dark:text-stone-300">{entry.data.caption}</figcaption>}
-      </figure>
+    (hasImage || hasMap) && (
+      <div class:list={["mb-10 grid gap-6", hasImage && hasMap && "lg:grid-cols-2 lg:items-start"]}>
+        {hasImage && entry.data.image?.file && (
+          <figure class:list={["overflow-hidden rounded-xl", !hasMap && "max-w-xl"]}>
+            <Image src={entry.data.image.file} alt={entry.data.image.alt ?? ""} class="aspect-4/3 w-full object-cover" widths={[640, 960]} sizes={hasMap ? "(min-width: 976px) 50vw, 100vw" : "(min-width: 576px) 36rem, 100vw"} />
+            {entry.data.caption && <figcaption class="mt-3 text-sm text-stone-600 dark:text-stone-300">{entry.data.caption}</figcaption>}
+          </figure>
+        )}
+        {hasMap && (
+          <div class:list={["aspect-4/3 min-h-56 w-full", !hasImage && "max-w-xl"]}>
+            <SiteMap id={`cruise-map-${entry.id}`} label={t("pages.cruises.map-label")} points={points} line={line} class="mt-0 h-full w-full" />
+          </div>
+        )}
+      </div>
     )
   }
-  <SiteMap id={`cruise-map-${entry.id}`} label={t("pages.cruises.map-label")} points={entry.data.map?.points} class="mb-8 mt-0 h-72 sm:h-96" />
   <div class="markdown-content max-w-3xl">
     <Content />
   </div>
