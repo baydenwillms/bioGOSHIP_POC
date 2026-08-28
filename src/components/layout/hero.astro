@@ -5,6 +5,7 @@ import { themeConfig } from '~/theme.config';
 import { useTranslations, getLocaleUrl } from "@utils/i18n";
 import Logo from "../../icons/bio_GOSHIP_logo_COLOR.svg";
 import LogoMark from "../../icons/bio_GOSHIP_logo_SVG_unofficial.svg";
+import GoShipLink from "@components/layout/go-ship-link.astro";
 import Copepod from "../../images/phyolpic/sm_copepod.svg";
 import Pterocorys from "../../images/phyolpic/sm_pterocorys.svg";
 import Salmonella from "../../images/phyolpic/sm_salmonella.svg";
@@ -34,10 +35,14 @@ const t = useTranslations(locale);
   <div class="relative z-10 flex w-full max-w-4xl flex-col items-center gap-6 text-center">
     {themeConfig.promotions?.heroChip && <HeroChip {locale} />}
 
-    <Logo class="logo-color h-48 w-auto dark:hidden sm:h-60 md:h-72" role="img" aria-label={t('pages.home.hero-logo-alt')} />
-    <LogoMark class="hidden h-48 w-auto text-white dark:block sm:h-60 md:h-72" role="img" aria-label={t('pages.home.hero-logo-alt')} />
-
-    <h1 class="hero-title">{t('pages.home.hero-title')}</h1>
+    <div class="flex flex-col items-center gap-3">
+      <div class="flex flex-col items-center gap-2">
+        <Logo class="logo-color h-48 w-auto dark:hidden sm:h-60 md:h-72" role="img" aria-label={t('pages.home.hero-logo-alt')} />
+        <LogoMark class="hidden h-48 w-auto text-white dark:block sm:h-60 md:h-72" role="img" aria-label={t('pages.home.hero-logo-alt')} />
+        <GoShipLink class="h-24 w-24 sm:h-28 sm:w-28" />
+      </div>
+      <h1 class="hero-title">{t('pages.home.hero-title')}</h1>
+    </div>
     <p class="hero-subline">{t('pages.home.hero-sub-slogan')}</p>
 
     <div class="flex flex-col gap-10">

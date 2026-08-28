@@ -1,0 +1,21 @@
+---
+import logo from "../../icons/GO-SHIPlogo.png";
+
+interface Props {
+  class?: string;
+  tabIndex?: number;
+}
+
+const { class: className = "h-12 w-12", tabIndex } = Astro.props;
+---
+
+<a
+  href="https://www.go-ship.org/"
+  target="_blank"
+  rel="noopener"
+  aria-label="GO-SHIP (opens in a new tab)"
+  tabindex={tabIndex}
+  class:list={["inline-flex shrink-0 items-center justify-center overflow-hidden rounded-md bg-white p-px no-underline hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2", className]}
+>
+  <img src={logo.src} alt="" width={logo.width} height={logo.height} class="h-full w-full object-contain" />
+</a>
