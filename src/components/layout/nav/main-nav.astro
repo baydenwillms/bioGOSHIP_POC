@@ -14,6 +14,7 @@ const { locale, tabIndex = 0 } = Astro.props as Props;
 const t = useTranslations(locale);
 
 const navLinks: NavItem[] = [
+  { href: getLocaleUrl('/', locale), label: t('nav.home') },
   { href: getLocaleUrl('team', locale), label: t('nav.team') },
   { href: getLocaleUrl('posts', locale), label: t('nav.blog') },
   { href: getLocaleUrl('publications', locale), label: t('nav.publications') },
