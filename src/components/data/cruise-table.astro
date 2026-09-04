@@ -87,7 +87,7 @@ function cellValue(row: CruiseExpedition, id: ColumnId) {
                         {column.linkLabel}
                       </a>
                     ) : value ? (
-                      <span class:list={[column.id === "expocode" && "font-mono text-xs"]}>{value}</span>
+                      <span>{value}</span>
                     ) : (
                       <span class="text-stone-400" aria-hidden="true">
                         —
