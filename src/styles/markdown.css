@@ -2,96 +2,86 @@
 
 @layer utilities {
   .markdown-content h1 {
-    @apply mb-8 text-3xl font-bold italic sm:text-5xl;
+    @apply mt-10 mb-4 text-2xl font-bold tracking-[-0.025em] sm:text-3xl;
   }
 
   .markdown-content h2 {
-    @apply mb-6 text-2xl font-bold sm:text-4xl;
-  }
-
-  .markdown-content p + h2,
-  .markdown-content ul + h2,
-  .markdown-content ol + h2,
-  .markdown-content img + h2,
-  .markdown-content .expressive-code + h2,
-  .markdown-content .video-container + h2 {
-    @apply mt-20;
+    @apply mt-10 mb-3 text-xl font-bold tracking-[-0.025em] sm:text-2xl;
   }
 
   .markdown-content h3 {
-    @apply mt-8 mb-5 text-xl font-bold sm:text-2xl;
-  }
-
-  .markdown-content p + h3,
-  .markdown-content ul + h3,
-  .markdown-content ol + h3,
-  .markdown-content img + h3,
-  .markdown-content .expressive-code + h3,
-  .markdown-content .video-container + h3 {
-    @apply mt-14;
+    @apply mt-8 mb-3 text-lg font-semibold;
   }
 
   .markdown-content h4 {
-    @apply mt-6 mb-4 text-xl font-bold;
+    @apply mt-6 mb-2 text-base font-semibold;
   }
 
-  .markdown-content p + h4,
-  .markdown-content .expressive-code + h4 {
-    @apply mt-10;
-  }
-
-  .markdown-content h5 {
-    @apply mt-6 mb-3 text-lg font-bold;
-  }
-
+  .markdown-content h5,
   .markdown-content h6 {
-    @apply mt-6 mb-3 text-base font-bold;
+    @apply mt-6 mb-2 text-sm font-semibold tracking-[0.04em] uppercase;
+  }
+
+  .markdown-content > :first-child {
+    @apply mt-0;
   }
 
   .markdown-content p {
-    @apply mb-4 text-base;
+    @apply mb-4 text-base leading-relaxed text-stone-700 dark:text-stone-300;
   }
 
   .markdown-content img {
-    @apply my-6 rounded-lg;
+    @apply my-6 rounded-xl;
+  }
+
+  .markdown-content figcaption {
+    @apply -mt-4 mb-6 text-sm text-stone-500;
   }
 
   .markdown-content blockquote {
-    @apply mt-8 mb-10 border-l-4 border-stone-400 p-4 opacity-70;
+    @apply border-accent my-6 border-l-2 py-0.5 pl-4 text-stone-600 dark:text-stone-300;
   }
 
   .markdown-content blockquote p {
-    @apply mb-0 text-xl italic;
+    @apply mb-0 text-base leading-relaxed;
   }
 
   .markdown-content ul {
-    @apply mb-4 ml-6 list-disc;
+    @apply mb-4 ml-5 list-disc;
   }
 
   .markdown-content ol {
-    @apply mb-4 ml-6 list-decimal;
+    @apply mb-4 ml-5 list-decimal;
+  }
+
+  .markdown-content li {
+    @apply leading-relaxed text-stone-700 dark:text-stone-300;
   }
 
   .markdown-content li ul,
   .markdown-content li ol {
-    @apply mt-4;
+    @apply mt-2 mb-0;
   }
 
   .markdown-content a:not(h1 a, h2 a, h3 a, h4 a, h5 a, h6 a) {
-    @apply line-clamp-1 inline;
+    @apply text-primary dark:text-primary-light break-words font-semibold underline-offset-2 hover:underline;
   }
 
   .markdown-content :is(h1, h2, h3, h4, h5, h6) > a {
-    @apply font-bold no-underline hover:text-inherit;
+    @apply font-bold text-inherit no-underline hover:text-inherit;
   }
 
   .markdown-content :is(h1, h2, h3, h4, h5, h6) > a:hover::before {
-    @apply absolute -ml-6 hidden font-semibold opacity-50 md:block;
-    content: '#';
+    @apply absolute -ml-5 hidden font-semibold opacity-40 md:block;
+    content: "#";
   }
 
   .markdown-content code {
-    @apply mx-0.5 rounded-sm bg-stone-400/50 px-2 py-0.5 font-mono text-sm dark:bg-stone-600/50;
+    @apply mx-0.5 rounded-sm bg-stone-100 px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-stone-800;
+  }
+
+  .markdown-content pre code {
+    @apply mx-0 bg-transparent px-0 py-0;
   }
 
   .markdown-content .expressive-code {
@@ -103,6 +93,27 @@
   }
 
   .markdown-content .video-embed {
-    @apply h-full w-full rounded-lg;
+    @apply h-full w-full rounded-xl;
+  }
+
+  .markdown-content hr {
+    @apply bg-accent mx-0 my-10 h-0.5 w-10 border-0;
+  }
+
+  .markdown-content table {
+    @apply my-6 w-full border-collapse text-left text-sm;
+  }
+
+  .markdown-content thead {
+    @apply text-xs font-semibold tracking-[0.08em] uppercase text-stone-500;
+  }
+
+  .markdown-content th,
+  .markdown-content td {
+    @apply py-2 pr-4 align-top;
+  }
+
+  .markdown-content tbody tr + tr {
+    @apply border-t border-stone-200 dark:border-stone-700;
   }
 }

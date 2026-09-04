@@ -2,10 +2,6 @@
 @import './markdown.css';
 
 @layer utilities {
-  img#title-image {
-    @apply mb-6 max-h-48 w-full rounded-lg bg-top object-cover shadow-lg transition-all sm:max-h-72 md:max-h-96;
-  }
-
   /* Social Share Buttons */
 
   .social-share-buttons button,

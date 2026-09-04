@@ -1,10 +1,9 @@
 ---
-import { Icon } from "astro-icon/components";
 import Layout from "@layouts/default.astro";
 import Headline from "@components/headline.astro";
 import List from "@components/blog/list.astro";
 import Pagination from "@components/blog/pagination.astro";
-import { useTranslations, getLocaleUrl } from "@utils/i18n";
+import { useTranslations } from "@utils/i18n";
 import { themeConfig } from '~/theme.config';
 import { sortArticleList } from "@utils/blog";
 import { getCollection } from 'astro:content';
@@ -27,27 +26,9 @@ const allArticles = page.data as CollectionEntry<'articles'>[];
 const numberofPages = Math.ceil(page.total / page.size);
 ---
 
-<Layout title={t('pages.blog.title') + (page.currentPage > 1 ? ' | ' + t('labels.page') + ' ' + page.currentPage : '')} noi18n={page.currentPage > 1} {locale}>
-  <Headline text={t('pages.blog.title') + (page.currentPage > 1 ? ': ' + t('labels.page') + ' ' + page.currentPage : '')} />
-  {
-    allArticles.length > 0 && themeConfig.articles && (themeConfig.articles.categories || themeConfig.articles.tags) && (
-      <div class="xs:gap-10 flex w-full flex-wrap justify-end gap-6 pb-10 sm:gap-6">
-        {themeConfig.articles.categories && (
-          <a href={getLocaleUrl('posts/categories', locale)} class="flex w-fit items-center gap-1 pr-1 text-sm no-underline hover:gap-2 hover:pr-0">
-            {t('labels.by_category')}
-            <Icon name="heroicons:arrow-right" class="h-3 w-3" />
-          </a>
-        )}
-        {themeConfig.articles.tags && (
-          <a href={getLocaleUrl('posts/tags', locale)} class="flex w-fit items-center gap-1 pr-1 text-sm no-underline hover:gap-2 hover:pr-0">
-            {t('labels.by_tag')}
-            <Icon name="heroicons:arrow-right" class="h-3 w-3" />
-          </a>
-        )}
-      </div>
-    )
-  }
-  {numberofPages > 1 && page.currentPage > 1 && <Pagination {page} {locale} baseUrl="posts" class="mt-4 mb-14" />}
-  {allArticles.length > 0 ? <List entries={allArticles} {locale} firstBig={page.currentPage === 1 ? true : false} /> : <div class="my-20 text-xl font-semibold italic">{t('labels.no-entries')}...</div>}
+<Layout title={t('pages.blog.title') + (page.currentPage > 1 ? ' | ' + t('labels.page') + ' ' + page.currentPage : '')} description={t('pages.blog.description')} noi18n={page.currentPage > 1} {locale}>
+  <Headline text={t('pages.blog.title') + (page.currentPage > 1 ? ': ' + t('labels.page') + ' ' + page.currentPage : '')} class="pb-8" />
+  {numberofPages > 1 && page.currentPage > 1 && <Pagination {page} {locale} baseUrl="posts" class="mt-0 mb-10" />}
+  {allArticles.length > 0 ? <List entries={allArticles} {locale} /> : <p class="text-stone-600 dark:text-stone-300">{t('labels.no-entries')}</p>}
   {numberofPages > 1 && <Pagination {page} {locale} baseUrl="posts" />}
 </Layout>

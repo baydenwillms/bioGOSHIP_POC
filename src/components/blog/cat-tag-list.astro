@@ -1,10 +1,8 @@
 ---
-import { Icon } from "astro-icon/components";
 import { useTranslations, getLocaleUrl } from "@utils/i18n";
-import { stringToColor } from "@utils/helpers";
 
 interface Props {
-  entries?: (string | undefined)[]; 
+  entries?: (string | undefined)[];
   locale: string;
   type: "tags" | "categories";
   small?: boolean;
@@ -12,31 +10,52 @@ interface Props {
 
 const { entries, locale, type, small } = Astro.props as Props;
 const t = useTranslations(locale);
+
+const items = (entries ?? []).filter((entry): entry is string => Boolean(entry));
+
+function slugify(value: string) {
+  return value.toLowerCase().replace(/\s/g, "-");
+}
+
+function label(value: string) {
+  return t(`${type}-t.${value}`);
+}
+
+/** Fixed colors per category so News is always News, not a random hash. */
+const categoryPill: Record<string, string> = {
+  news: "bg-primary text-white",
+  "cruise-updates": "bg-secondary text-secondary-contrast",
+  papers: "bg-primary-dark text-white",
+  methods: "bg-accent text-accent-contrast",
+  training: "bg-secondary-dark text-white",
+  general: "bg-stone-600 text-white",
+  sampling: "bg-primary-light text-white",
+  community: "bg-secondary-dark text-white",
+  data: "bg-accent-dark text-white",
+};
 ---
 
-<div class:list={[small ? 'gap-2' : 'gap-4', 'flex flex-wrap justify-center sm:justify-start']}>
-  {
-    entries && entries.length > 0 ? (
-      entries.map(async (entry) => (
-        <div>
-          <a href={getLocaleUrl(`posts/${type}/${entry?.toLowerCase().replace(/\s/g, '-')}`, locale)} class="group block no-underline hover:drop-shadow-lg">
-            <span
-              class:list={[
-                type === 'tags' ? 'rounded-full' : 'rounded-lg',
-                'ring-primary dark:text-text-dark text-text flex items-center border border-stone-300 bg-stone-100 ring-offset-white outline-0 transition-colors group-hover:bg-stone-200 group-focus-within:ring-2 group-focus-within:ring-offset-2 dark:border-stone-600 dark:bg-stone-800 dark:ring-offset-black dark:group-hover:bg-stone-700',
-              ]}
-            >
-              {type === 'categories' && <span class="group-hover:bg-secondary block h-auto w-3 self-stretch rounded-l-lg" style={'background-color: ' + stringToColor(entry)} />}
-              <span class:list={[small && type === 'tags' ? 'pl-4' : small && type === 'categories' && 'pl-3', small ? 'gap-2 py-1.5 pr-2' : 'gap-2 py-3 pr-4 pl-6 sm:gap-4 sm:pl-8', 'flex items-center']}>
-                <span class:list={[small && 'text-xs', 'font-semibold']}>{t(type + '-t.' + entry)}</span>
-                <Icon name="heroicons:arrow-right" class:list={[small ? 'h-3 group-hover:w-3' : 'h-5 group-hover:w-5', 'w-0 transition-all']} />
-              </span>
-            </span>
+{
+  items.length > 0 ? (
+    <ul class:list={["m-0 flex list-none flex-wrap p-0", small ? "gap-1.5" : "gap-2"]}>
+      {items.map((entry) => (
+        <li class="m-0 mt-0">
+          <a
+            href={getLocaleUrl(`posts/${type}/${slugify(entry)}`, locale)}
+            class:list={[
+              "inline-flex items-center rounded-full font-semibold no-underline hover:opacity-80",
+              small ? "px-2.5 py-0.5 text-xs" : "px-3 py-1 text-sm",
+              type === "categories"
+                ? (categoryPill[slugify(entry)] ?? "bg-primary text-white")
+                : "bg-stone-200 text-stone-700 dark:bg-stone-700 dark:text-stone-200",
+            ]}
+          >
+            {label(entry)}
           </a>
-        </div>
-      ))
-    ) : (
-      <div class="my-10 text-xl font-semibold italic">{t('labels.no-entries')}...</div>
-    )
-  }
-</div>
+        </li>
+      ))}
+    </ul>
+  ) : small ? null : (
+    <p class="text-stone-600 dark:text-stone-300">{t("labels.no-entries")}</p>
+  )
+}

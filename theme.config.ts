@@ -50,7 +50,7 @@ export const themeConfig: ThemeConfig = {
 
   // content/articles settings
   articles: {
-    imageFallback: true,
+    imageFallback: false,
     gridView: true,
     textOverImage: false,
     categories: true, // if set false, make sure to also remove category directories under /pages

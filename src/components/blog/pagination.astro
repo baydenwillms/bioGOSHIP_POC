@@ -1,7 +1,6 @@
 ---
-import { Icon } from "astro-icon/components";
 import { getLocaleUrl, useTranslations } from "@utils/i18n";
-import type { Page } from 'astro';
+import type { Page } from "astro";
 
 interface Props {
   page: Page;
@@ -10,8 +9,8 @@ interface Props {
   class?: string;
 }
 
-const { page, baseUrl = 'posts', locale } = Astro.props as Props;
-const classOverride = Astro.props.class || 'mb-3 mt-28';
+const { page, baseUrl = "posts", locale } = Astro.props as Props;
+const classOverride = Astro.props.class || "mt-12";
 const t = useTranslations(locale);
 
 function generatePaginationItems(page: Page) {
@@ -39,53 +38,56 @@ function generatePaginationItems(page: Page) {
 }
 
 const paginationItems = generatePaginationItems(page);
+const numberofPages = Math.ceil(page.total / page.size);
 ---
 
-<nav aria-label={t('labels.pagination')} class={classOverride}>
-  <ul class="mx-auto flex w-fit items-center justify-center drop-shadow select-none hover:drop-shadow-lg">
-    <li>
+<nav aria-label={t("labels.pagination")} class={classOverride}>
+  <ul class="m-0 flex list-none flex-wrap items-center justify-center gap-x-5 gap-y-2 p-0 text-sm">
+    <li class="m-0">
       {
         page.url.prev ? (
-          <a href={page.url.prev} aria-label={t('labels.prev')} class="hover:text-primary-contrast hover:border-primary hover:bg-primary relative flex h-10 w-fit items-center justify-center rounded-s-lg border border-stone-400 bg-stone-200 px-6 hover:z-20 md:px-3 dark:bg-stone-800">
-            <Icon name="heroicons:chevron-left" class="h-5 w-5" />
+          <a href={page.url.prev} class="font-semibold no-underline hover:underline">
+            {t("labels.prev")}
           </a>
         ) : (
-          <div class="flex h-10 w-fit cursor-not-allowed items-center justify-center rounded-s-lg border border-stone-400 bg-stone-200 px-3 opacity-30 dark:bg-stone-800">
-            <Icon name="heroicons:chevron-left" class="h-5 w-5" />
-          </div>
+          <span class="text-stone-400">{t("labels.prev")}</span>
         )
       }
     </li>
     {
-      paginationItems.map(async (pageNum, index, array) => (
+      paginationItems.map((pageNum, index, array) => (
         <>
-          <li class="mt-0 ml-[-2px] hidden md:block">
+          <li class="m-0 hidden md:block">
             <a
-              href={pageNum === 1 ? getLocaleUrl('/' + baseUrl, locale) : getLocaleUrl(`/${baseUrl}/${pageNum}`, locale)}
-              aria-label={t('labels.page')}
-              class:list={[pageNum === page.currentPage ? 'border-primary text-primary z-20' : 'hover:border-primary border-stone-400', 'hover:text-primary-contrast hover:bg-primary relative flex h-10 w-fit items-center justify-center border bg-stone-200 px-4 font-semibold no-underline hover:z-20 dark:bg-stone-800']}
+              href={pageNum === 1 ? getLocaleUrl("/" + baseUrl, locale) : getLocaleUrl(`/${baseUrl}/${pageNum}`, locale)}
+              aria-current={pageNum === page.currentPage ? "page" : undefined}
+              aria-label={`${t("labels.page")} ${pageNum}`}
+              class:list={[pageNum === page.currentPage ? "text-primary dark:text-primary-light font-bold no-underline" : "font-semibold no-underline hover:underline"]}
             >
               {pageNum}
             </a>
           </li>
           {array[index + 1] && array[index + 1] - pageNum > 1 && (
-            <li class="mt-0 ml-[-2px] hidden md:block">
-              <span class="relative flex h-10 w-fit items-center justify-center border border-stone-400 bg-stone-200 px-4 dark:bg-stone-800">...</span>
+            <li class="m-0 hidden text-stone-400 md:block" aria-hidden="true">
+              …
             </li>
           )}
         </>
       ))
     }
-    <li class="mt-0 ml-[-2px]">
+    <li class="m-0 md:hidden">
+      <span>
+        {t("labels.page")} {page.currentPage} / {numberofPages}
+      </span>
+    </li>
+    <li class="m-0">
       {
         page.url.next ? (
-          <a href={page.url.next} aria-label={t('labels.next')} class="hover:text-primary-contrast hover:border-primary hover:bg-primary relative flex h-10 w-fit items-center justify-center rounded-e-lg border border-stone-400 bg-stone-200 px-6 hover:z-20 md:px-3 dark:bg-stone-800">
-            <Icon name="heroicons:chevron-right" class="h-5 w-5" />
+          <a href={page.url.next} class="font-semibold no-underline hover:underline">
+            {t("labels.next")}
           </a>
         ) : (
-          <div class="flex h-10 w-fit cursor-not-allowed items-center justify-center rounded-e-lg border border-stone-400 bg-stone-200 px-3 opacity-30 dark:bg-stone-800">
-            <Icon name="heroicons:chevron-right" class="h-5 w-5" />
-          </div>
+          <span class="text-stone-400">{t("labels.next")}</span>
         )
       }
     </li>

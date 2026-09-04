@@ -11,7 +11,6 @@ const locale = themeConfig.i18n.defaultLocale;
 const t = useTranslations(locale);
 
 const allArticles = await getCollection('articles', ({ id, data }) => {
-  // only use articles that are not drafts and mind locale
   return !data.draft && id.startsWith(locale + '/');
 }) as CollectionEntry<'articles'>[];
 
@@ -19,6 +18,6 @@ const tags = [...new Set(allArticles.map((article) => article.data.tags || []).f
 ---
 
 <Layout title={t('labels.tags')} header={{ button: { text: t('labels.back-all-articles'), href: getLocaleUrl('posts', locale) }, fixed: true }}>
-  <Headline text={t('labels.tags')} icon="heroicons:tag" class="pb-10" />
+  <Headline text={t('labels.tags')} class="pb-8" />
   <List entries={tags} {locale} type="tags" />
 </Layout>

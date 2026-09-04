@@ -1,6 +1,7 @@
 ---
 import Layout from "@layouts/default.astro";
 import Headline from "@components/headline.astro";
+import CruiseTable from "@components/data/cruise-table.astro";
 import { Icon } from "astro-icon/components";
 import { useTranslations } from "@utils/i18n";
 import { themeConfig } from "~/theme.config";
@@ -82,4 +83,6 @@ const repositories: Repository[] = [
       ))
     }
   </ul>
+
+  <CruiseTable {locale} />
 </Layout>

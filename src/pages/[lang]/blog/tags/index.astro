@@ -27,6 +27,6 @@ const tags = [...new Set(allArticles.map((article) => article.data.tags || []).f
 ---
 
 <Layout title={t('labels.tags')} header={{ button: { text: t('labels.back-all-articles'), href: getLocaleUrl('blog', locale) }, fixed: true }}>
-  <Headline text={t('labels.tags')} icon="heroicons:tag" class="pb-10" />
+  <Headline text={t('labels.tags')} class="pb-8" />
   <List entries={tags} {locale} type="tags" />
 </Layout>

@@ -17,16 +17,8 @@ export function getAdjacentArticles<T extends CollectionEntry<'articles'>>(index
   if (articles.length <= 1) {
     return null;
   }
-  const prev = articles[index - 1];
-  const next = articles[index + 1];
-  if (prev && next) {
-    return { prev, next };
-  }
-  if (next && !prev) {
-    return { prev: next, next: articles[index + 2] };
-  }
-  if (prev && !next) {
-    return { prev: articles[index - 2], next: prev };
-  }
-  return { prev: undefined, next: articles[0] };
+  return {
+    prev: index > 0 ? articles[index - 1] : undefined,
+    next: index < articles.length - 1 ? articles[index + 1] : undefined,
+  };
 }
