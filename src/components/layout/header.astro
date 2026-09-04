@@ -407,7 +407,7 @@ const isOverlayScroll = !fixed && !!overlay && !isClose;
   @reference "../../styles/tailwind.config.css";
 
   .header-base-style {
-    @apply text-text dark:text-text-dark w-full bg-white/70 shadow backdrop-blur-xl dark:bg-stone-900/40;
+    @apply text-text dark:text-text-dark w-full bg-white shadow dark:bg-stone-900;
   }
 
   /* Override logo visibility when header is in overlay-dark mode */
@@ -416,5 +416,8 @@ const isOverlayScroll = !fixed && !!overlay && !isClose;
   }
   header[data-overlay-theme='dark'] :global(.header-logo-white) {
     display: block !important;
+  }
+  header[data-overlay-theme='dark'] :global(.site-wordmark) {
+    color: white;
   }
 </style>

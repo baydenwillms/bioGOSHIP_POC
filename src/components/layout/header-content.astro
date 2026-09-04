@@ -42,8 +42,8 @@ const { locale, button, tabIndex = 0, shrink = true, isHome, ctaButton, github }
     ) : isHome ? (
       <span class="flex items-center gap-3">
         <span aria-hidden="true" class="shrink-0">
-          <Logo class="logo-color h-14 w-auto dark:hidden" />
-          <LogoMark class="hidden h-14 w-auto text-white dark:block" />
+          <Logo class="header-logo-dark logo-color h-14 w-auto dark:hidden" />
+          <LogoMark class="header-logo-white hidden h-14 w-auto text-white dark:block" />
         </span>
         <span class="site-wordmark">
           <span class="site-wordmark__bio">Bio</span>
@@ -53,8 +53,8 @@ const { locale, button, tabIndex = 0, shrink = true, isHome, ctaButton, github }
     ) : (
       <a href={getLocaleUrl('/', locale)} class="flex w-fit items-center gap-3 no-underline select-none hover:no-underline focus:no-underline" tabindex={tabIndex}>
         <span aria-hidden="true" class="shrink-0">
-          <Logo class="logo-color h-14 w-auto dark:hidden" />
-          <LogoMark class="hidden h-14 w-auto text-white dark:block" />
+          <Logo class="header-logo-dark logo-color h-14 w-auto dark:hidden" />
+          <LogoMark class="header-logo-white hidden h-14 w-auto text-white dark:block" />
         </span>
         <span class="site-wordmark">
           <span class="site-wordmark__bio">Bio</span>

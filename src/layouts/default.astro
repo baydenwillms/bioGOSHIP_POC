@@ -32,6 +32,8 @@ interface Props {
     fixed?: boolean;
     /** Puts the header above the content (overlay) */
     overlay?: boolean;
+    /** Force light or dark overlay header colors */
+    overlayTheme?: "light" | "dark";
     /** Pixels scrolled before showing scroll header (default: header out of viewport) */
     scrollDownThreshold?: number;
     /** Show a close icon instead of the site name or button */
@@ -103,7 +105,7 @@ const showTopBanner = (themeConfig.promotions?.topBanner && header?.showTopBanne
     <div class="relative w-full">
       {
         header?.hidden !== true && (
-          <Header {locale} button={header?.button ?? undefined} ctaButton={{ text: t('nav.contact'), href: getLocaleUrl('contact', locale) }} {isHome} fixed={header?.fixed} overlay={header?.overlay} scrollDownThreshold={header?.scrollDownThreshold} closeIcon={header?.closeIcon} hasTopBanner={showTopBanner} />
+          <Header {locale} button={header?.button ?? undefined} ctaButton={{ text: t('nav.contact'), href: getLocaleUrl('contact', locale) }} {isHome} fixed={header?.fixed} overlay={header?.overlay} overlayTheme={header?.overlayTheme} scrollDownThreshold={header?.scrollDownThreshold} closeIcon={header?.closeIcon} hasTopBanner={showTopBanner} />
         )
       }
       <main role="main" class="relative z-40">

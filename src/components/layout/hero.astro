@@ -1,17 +1,12 @@
 ---
+import type { ImageMetadata } from "astro";
 import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
 import HeroChip from "@components/promo/hero-chip.astro";
 import { themeConfig } from '~/theme.config';
 import { useTranslations, getLocaleUrl } from "@utils/i18n";
-import Logo from "../../icons/bio_GOSHIP_logo_COLOR.svg";
 import LogoMark from "../../icons/bio_GOSHIP_logo_SVG_unofficial.svg";
 import GoShipLink from "@components/layout/go-ship-link.astro";
-import Copepod from "../../images/phyolpic/sm_copepod.svg";
-import Pterocorys from "../../images/phyolpic/sm_pterocorys.svg";
-import Salmonella from "../../images/phyolpic/sm_salmonella.svg";
-import Shrimp from "../../images/phyolpic/md_shrimp.svg";
-import Tuna from "../../images/phyolpic/lg_bluefin_tuna.svg";
-import Shark from "../../images/phyolpic/xl_lamniformes.svg";
 
 interface Props {
   locale: string;
@@ -19,92 +14,352 @@ interface Props {
 
 const { locale } = Astro.props as Props;
 const t = useTranslations(locale);
+
+const carouselModules = import.meta.glob<{ default: ImageMetadata }>("../../images/carousel/*.{jpg,jpeg,png,webp}", { eager: true });
+
+const slides = Object.entries(carouselModules)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([, mod], i) => ({
+    src: mod.default,
+    alt: `${t("pages.home.carousel-label")} ${i + 1}`,
+  }));
 ---
 
-<div role="banner" class="hero relative flex min-h-svh w-full flex-col items-center justify-center overflow-hidden px-6 pt-32 pb-24">
-  <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-    <!-- Sized by rough real-world scale: bacterium < plankton < shrimp < tuna < shark -->
-    <Salmonella class="phylo-deco top-[14%] left-[28%] hidden h-6 w-auto sm:block" />
-    <Pterocorys class="phylo-deco top-[20%] right-[24%] h-10 w-auto sm:h-12" />
-    <Copepod class="phylo-deco top-[42%] left-[18%] h-11 w-auto sm:h-12" />
-    <Tuna class="phylo-deco top-[36%] right-[16%] hidden h-20 w-auto lg:block lg:h-24" />
-    <Shrimp class="phylo-deco top-[68%] left-[22%] hidden h-14 w-auto sm:block md:h-16" />
-    <Shark class="phylo-deco right-[10%] bottom-[8%] hidden h-36 w-auto md:block lg:h-44" />
-  </div>
+<div
+  role="banner"
+  class="hero relative flex min-h-[calc(100svh-6rem)] w-full flex-col items-center justify-center overflow-hidden px-6 pt-12 pb-24"
+  data-hero-carousel
+>
+  {
+    slides.length > 0 && (
+      <div class="hero-carousel" data-hero-slides>
+        {slides.map((slide, i) => (
+          <div class:list={["hero-carousel__slide", i === 0 && "is-active"]} data-slide aria-hidden={i === 0 ? "false" : "true"}>
+            <Image src={slide.src} alt={slide.alt} class="hero-carousel__media" widths={[800, 1280, 1920]} sizes="100vw" loading="eager" />
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  {slides.length > 0 && <div class="hero-scrim pointer-events-none absolute inset-0" aria-hidden="true"></div>}
 
   <div class="relative z-10 flex w-full max-w-4xl flex-col items-center gap-6 text-center">
     {themeConfig.promotions?.heroChip && <HeroChip {locale} />}
 
     <div class="flex flex-col items-center gap-3">
       <div class="flex flex-col items-center gap-2">
-        <Logo class="logo-color h-48 w-auto dark:hidden sm:h-60 md:h-72" role="img" aria-label={t('pages.home.hero-logo-alt')} />
-        <LogoMark class="hidden h-48 w-auto text-white dark:block sm:h-60 md:h-72" role="img" aria-label={t('pages.home.hero-logo-alt')} />
-        <GoShipLink class="h-24 w-24 sm:h-28 sm:w-28" />
+        <LogoMark class="h-36 w-auto text-white drop-shadow-lg sm:h-44 md:h-52" role="img" aria-label={t('pages.home.hero-logo-alt')} />
+        <GoShipLink class="h-16 w-16 sm:h-20 sm:w-20" />
       </div>
       <h1 class="hero-title">{t('pages.home.hero-title')}</h1>
     </div>
     <p class="hero-subline">{t('pages.home.hero-sub-slogan')}</p>
 
-    <div class="flex flex-col gap-10">
-      <div class="mt-1 flex flex-wrap justify-center gap-4">
-        <a href="#home-features-heading" class="btn-primary">{t('pages.home.hero-cta-primary')}</a>
-        <a href={getLocaleUrl('contact', locale)} class="btn-subtle group rounded px-4 py-[0.43rem]">
-          <span>{t('pages.home.hero-cta-secondary')}</span>
-          <Icon name="heroicons:arrow-right" class="mr-1 ml-0 h-4 w-4 transition-all duration-200 group-hover:mr-0 group-hover:ml-1" />
-        </a>
-      </div>
-    </div>
-
-    <div class="relative mt-10 max-w-2xl">
-      <p class="mission-eyebrow">{t('pages.home.mission-eyebrow')}</p>
-      <p class="mt-3 text-lg leading-relaxed text-stone-600 sm:text-xl dark:text-stone-300">{t('pages.home.mission-text')}</p>
+    <div class="mt-1 flex flex-wrap justify-center gap-4">
+        <a href="#home-overview-heading" class="btn-primary">{t('pages.home.hero-cta-primary')}</a>
+      <a href={getLocaleUrl('contact', locale)} class="btn-subtle group rounded px-4 py-[0.43rem]">
+        <span>{t('pages.home.hero-cta-secondary')}</span>
+        <Icon name="heroicons:arrow-right" class="mr-1 ml-0 h-4 w-4 transition-all duration-200 group-hover:mr-0 group-hover:ml-1" />
+      </a>
     </div>
   </div>
+
+  {
+    slides.length > 1 && (
+      <div class="hero-controls absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3">
+        <div class="flex items-center gap-2" data-hero-dots role="group" aria-label={t("pages.home.carousel-label")}>
+          {slides.map((_, i) => (
+            <button type="button" class="hero-dot" data-carousel-dot aria-label={`${t("pages.home.carousel-show")} ${i + 1}`} aria-current={i === 0 ? "true" : "false"} />
+          ))}
+        </div>
+        <button type="button" class="hero-pause" data-carousel-pause data-label-pause={t("pages.home.carousel-pause")} data-label-play={t("pages.home.carousel-play")} aria-pressed="false" aria-label={t("pages.home.carousel-pause")}>
+          <Icon name="heroicons:pause" class="hero-pause__pause h-4 w-4" aria-hidden="true" />
+          <Icon name="heroicons:play" class="hero-pause__play hidden h-4 w-4" aria-hidden="true" />
+        </button>
+      </div>
+    )
+  }
 </div>
 
 <style>
   @reference "../../styles/tailwind.config.css";
 
   .hero {
-    background-color: #ffffff;
+    background-color: #141346;
   }
 
-  :global(.dark) .hero {
-    background-color: var(--color-background-dark);
+  .hero-carousel {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .hero-carousel__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    z-index: 0;
+    pointer-events: none;
+    transition: opacity 1s ease;
+  }
+
+  .hero-carousel__slide.is-active {
+    opacity: 1;
+    z-index: 1;
+  }
+
+  .hero-carousel__media {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-scrim {
+    z-index: 1;
+    background:
+      linear-gradient(to bottom, rgba(20, 19, 70, 0.68) 0%, rgba(20, 19, 70, 0.42) 40%, rgba(20, 19, 70, 0.7) 100%);
   }
 
   .hero-title {
-    @apply text-primary m-0 leading-[1.08] font-bold tracking-[-0.025em];
+    @apply m-0 leading-[1.08] font-bold tracking-[-0.025em] text-white;
     font-size: clamp(2.4rem, 6vw, 4.8rem);
-  }
-
-  :global(.dark) .hero-title {
-    @apply text-white;
+    text-shadow: 0 2px 18px rgba(20, 19, 70, 0.55);
   }
 
   .hero-subline {
-    @apply m-0 max-w-[38rem] leading-[1.65] text-stone-600;
+    @apply m-0 max-w-[38rem] leading-[1.65] text-white/95;
     font-size: clamp(1rem, 1.8vw, 1.2rem);
+    text-shadow: 0 1px 10px rgba(20, 19, 70, 0.5);
   }
 
-  :global(.dark) .hero-subline {
-    @apply text-stone-300;
+  .hero-dot {
+    width: 0.65rem;
+    height: 0.65rem;
+    padding: 0;
+    border: 1px solid white;
+    border-radius: 9999px;
+    background: transparent;
+    cursor: pointer;
   }
 
-  .mission-eyebrow {
-    @apply text-primary text-sm font-semibold tracking-[0.2em] uppercase;
+  .hero-dot[aria-current='true'] {
+    background: white;
   }
 
-  :global(.dark) .mission-eyebrow {
-    @apply text-primary-light;
+  .hero-pause {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 9999px;
+    background: rgba(20, 19, 70, 0.35);
+    color: white;
+    cursor: pointer;
   }
 
-  .mission-eyebrow::after {
-    content: '';
+  .hero-pause:hover,
+  .hero-dot:hover {
+    background: rgba(255, 255, 255, 0.35);
+  }
+
+  .hero-pause:focus-visible,
+  .hero-dot:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 3px;
+  }
+
+  .hero-pause[aria-pressed='true'] .hero-pause__pause {
+    display: none;
+  }
+
+  .hero-pause[aria-pressed='true'] .hero-pause__play {
     display: block;
-    width: 2.5rem;
-    height: 2px;
-    margin: 0.65rem auto 0;
-    background: var(--color-accent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-carousel__slide {
+      transition: none;
+    }
   }
 </style>
+
+<script is:inline>
+  (function () {
+    var root = document.querySelector('[data-hero-carousel]');
+    if (!root || root.getAttribute('data-shuffled') === 'true') return;
+    var slidesParent = root.querySelector('[data-hero-slides]');
+    var dotsParent = root.querySelector('[data-hero-dots]');
+    if (!slidesParent || slidesParent.children.length < 2) return;
+
+    var n = slidesParent.children.length;
+    var order = [];
+    var i;
+    for (i = 0; i < n; i++) order.push(i);
+    for (i = n - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = order[i];
+      order[i] = order[j];
+      order[j] = tmp;
+    }
+
+    function applyOrder(parent) {
+      var nodes = Array.prototype.slice.call(parent.children);
+      order.forEach(function (index) {
+        parent.appendChild(nodes[index]);
+      });
+    }
+
+    applyOrder(slidesParent);
+    if (dotsParent && dotsParent.children.length === n) applyOrder(dotsParent);
+
+    Array.prototype.forEach.call(root.querySelectorAll('[data-slide]'), function (slide, index) {
+      slide.classList.toggle('is-active', index === 0);
+      slide.setAttribute('aria-hidden', index === 0 ? 'false' : 'true');
+    });
+    Array.prototype.forEach.call(root.querySelectorAll('[data-carousel-dot]'), function (dot, index) {
+      dot.setAttribute('aria-current', index === 0 ? 'true' : 'false');
+    });
+    root.setAttribute('data-shuffled', 'true');
+  })();
+</script>
+
+<script>
+  let cleanupHeroCarousel = () => {};
+
+  function shuffledOrder(length: number) {
+    const order = Array.from({ length }, (_, i) => i);
+    for (let i = length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const swap = order[i];
+      order[i] = order[j];
+      order[j] = swap;
+    }
+    return order;
+  }
+
+  function applyOrder(parent: Element, order: number[]) {
+    const nodes = [...parent.children];
+    order.forEach((index) => {
+      const node = nodes[index];
+      if (node) parent.appendChild(node);
+    });
+  }
+
+  function shuffleCarousel(root: HTMLElement) {
+    if (root.dataset.shuffled === 'true') return;
+    const slidesParent = root.querySelector('[data-hero-slides]');
+    const dotsParent = root.querySelector('[data-hero-dots]');
+    if (!slidesParent || slidesParent.children.length < 2) return;
+
+    const order = shuffledOrder(slidesParent.children.length);
+    applyOrder(slidesParent, order);
+    if (dotsParent && dotsParent.children.length === order.length) applyOrder(dotsParent, order);
+
+    root.querySelectorAll<HTMLElement>('[data-slide]').forEach((slide, i) => {
+      slide.classList.toggle('is-active', i === 0);
+      slide.setAttribute('aria-hidden', i === 0 ? 'false' : 'true');
+    });
+    root.querySelectorAll<HTMLButtonElement>('[data-carousel-dot]').forEach((dot, i) => {
+      dot.setAttribute('aria-current', i === 0 ? 'true' : 'false');
+    });
+    root.dataset.shuffled = 'true';
+  }
+
+  function setupHeroCarousel() {
+    cleanupHeroCarousel();
+
+    const root = document.querySelector<HTMLElement>('[data-hero-carousel]');
+    if (!root) return;
+
+    shuffleCarousel(root);
+
+    const slides = [...root.querySelectorAll<HTMLElement>('[data-slide]')];
+    const dots = [...root.querySelectorAll<HTMLButtonElement>('[data-carousel-dot]')];
+    const pauseBtn = root.querySelector<HTMLButtonElement>('[data-carousel-pause]');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (slides.length < 2) return;
+
+    let index = 0;
+    let paused = reduceMotion;
+    let timer: number | undefined;
+    const intervalMs = 6500;
+
+    const show = (next: number) => {
+      index = (next + slides.length) % slides.length;
+      slides.forEach((slide, i) => {
+        const on = i === index;
+        slide.classList.toggle('is-active', on);
+        slide.setAttribute('aria-hidden', on ? 'false' : 'true');
+      });
+      dots.forEach((dot, i) => {
+        dot.setAttribute('aria-current', i === index ? 'true' : 'false');
+      });
+    };
+
+    const stop = () => {
+      if (timer !== undefined) {
+        window.clearInterval(timer);
+        timer = undefined;
+      }
+    };
+
+    const start = () => {
+      stop();
+      if (paused || reduceMotion) return;
+      timer = window.setInterval(() => show(index + 1), intervalMs);
+    };
+
+    const syncPauseUi = () => {
+      if (!pauseBtn) return;
+      pauseBtn.setAttribute('aria-pressed', paused ? 'true' : 'false');
+      const label = paused ? pauseBtn.dataset.labelPlay : pauseBtn.dataset.labelPause;
+      if (label) pauseBtn.setAttribute('aria-label', label);
+    };
+
+    const onPauseClick = () => {
+      paused = !paused;
+      syncPauseUi();
+      if (paused) stop();
+      else start();
+    };
+
+    const onDotClick = (event: Event) => {
+      const target = event.currentTarget as HTMLButtonElement;
+      const next = dots.indexOf(target);
+      if (next < 0) return;
+      show(next);
+      if (!paused) start();
+    };
+
+    const onVisibility = () => {
+      if (document.hidden) stop();
+      else start();
+    };
+
+    pauseBtn?.addEventListener('click', onPauseClick);
+    dots.forEach((dot) => dot.addEventListener('click', onDotClick));
+    document.addEventListener('visibilitychange', onVisibility);
+
+    show(0);
+    syncPauseUi();
+    start();
+
+    cleanupHeroCarousel = () => {
+      stop();
+      pauseBtn?.removeEventListener('click', onPauseClick);
+      dots.forEach((dot) => dot.removeEventListener('click', onDotClick));
+      document.removeEventListener('visibilitychange', onVisibility);
+      cleanupHeroCarousel = () => {};
+    };
+  }
+
+  setupHeroCarousel();
+  document.addEventListener('astro:page-load', setupHeroCarousel);
+  document.addEventListener('astro:before-swap', () => cleanupHeroCarousel());
+</script>
